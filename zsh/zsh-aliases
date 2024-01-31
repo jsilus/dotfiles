@@ -1,0 +1,12 @@
+#!/bin/bash
+
+alias ls="eza -l --no-quotes --group-directories-first"
+alias :q="exit"
+
+alias grep="grep --color=auto"
+alias egrep="egrep --color=auto"
+alias fgrep="fgrep --color=auto"
+
+alias rm="rm -i"
+alias mv="mv -i"
+alias cp="cp -i"

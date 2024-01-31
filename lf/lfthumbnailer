@@ -1,0 +1,63 @@
+#!/bin/sh
+
+[ ! -f "$1" ] && exit 1
+
+cache="/tmp/lfthumbnailer"
+index="$cache/index.json"
+orig="$(realpath "$1")"
+mkdir -p "$cache"
+
+# check cache for existing thumbnail
+if [ -f "$index" ]; then
+    thumbnail="$(jq -r ". \"$orig\"" < "$index")"
+    if [[ "$thumbnail" != "null" ]]; then
+        if [[ ! -f "$cache/$thumbnail" ]]; then
+            exit 1
+        fi
+        echo "$cache/$thumbnail"
+        exit 0
+    fi
+fi
+
+thumbnail="$(uuidgen).jpg"
+filetype="$(file -Lb --mime-type "$orig")"
+
+case "$filetype" in
+    *photoshop|*psd)
+        convert "$orig"[0] -flatten "$cache/$thumbnail"
+    ;;
+    image/gif)
+        ffmpegthumbnailer -i "$orig" -o "$cache/$thumbnail" -s 0 2> /dev/null
+    ;;
+    image/*)
+        if [ "${orig%/*}" = "$cache" ]; then
+            echo "$orig"
+            exit 0
+        fi
+
+        dim="$(identify -format "%wx%h\n" "$orig")"
+        if [ "${dim%x*}" -le 1920 -a "${dim#*x}" -le 1080 ]; then
+            echo "$orig"
+            exit 0
+        fi
+
+        convert "$orig" -resize 1920x "$cache/$thumbnail"
+    ;;
+
+    video/*)
+        ffmpegthumbnailer -i "$orig" -o "$cache/$thumbnail" -s 0 2> /dev/null
+    ;;
+
+    */pdf)
+        pdftoppm -f 1 -l 1 -scale-to-x 1920 -scale-to-y -1 -singlefile -jpeg -tiffcompression jpeg -- "$orig" "$cache/${thumbnail%.*}"
+    ;;
+esac
+
+[[ -f "$cache/$thumbnail" ]] || exit 1
+
+# update index
+[[ -f "$index" ]] || echo "{\"$orig\": \"$thumbnail\"}" > "$index"
+json="$(jq -r --arg "$orig" "$thumbnail" ". + {\"$orig\": \"$thumbnail\"}" < "$index")"
+echo "$json" > "$index"
+
+echo "$cache/$thumbnail"

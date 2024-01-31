@@ -1,0 +1,167 @@
+
+# shell options
+set shell sh
+set shellopts '-eu'
+set ifs "\n"
+set icons
+
+# basic options
+set previewer ~/.config/lf/lf_kitty_preview
+set cleaner ~/.config/lf/lf_kitty_clean
+set period 1
+set scrolloff 10
+
+# edit and hot reload config
+cmd edit-config ${{
+    $EDITOR ~/.config/lf/lfrc
+    lf -remote "send $id source ~/.config/lf/lfrc"
+}}
+
+# visuals
+set info size
+set dircounts
+set cursorpreviewfmt "\033[4m"
+cmd on-select &{{
+    lf -remote "send $id set statfmt \"$(eza -ld --color=always "$f")\""
+}}
+
+# commands
+cmd open &{{
+    case $(file --mime-type -Lb $f) in
+        text/*) lf -remote "send $id \$$EDITOR \$fx";;
+        *) for f in $fx; do $OPENER $f > /dev/null 2> /dev/null & done;;
+    esac
+}}
+
+cmd q :quit
+
+cmd create %{{
+    for arg in "$@"; do
+        if [ "${arg: -1}" = "/" ]; then
+            [ -e "${arg:0:-1}" ] && printf "file/folder exists" || mkdir -p "$arg"
+        else
+            [ -e "$arg" ] && printf "file/folder exists" && exit 0
+            [[ "$arg" == *"/"* ]] && mkdir -p "${arg%/*}"
+            touch "$arg"
+        fi
+    done
+}}
+
+cmd move-parent &{{
+    dironly="setlocal '$(dirname "$PWD")' dironly"
+    lf -remote "send $id :updir; $dironly true; $1; $dironly false; open"
+}}
+
+cmd delete ${{
+    set -f
+    printf "$fx\n"
+    printf "delete?[y/N]"
+    read ans
+    [ "$ans" = "y" ] && rm -rf $fx
+}}
+
+cmd git_branch ${{
+    git branch | fzf | xargs git checkout
+    pwd_shell=$(pwd | sed 's/\\/\\\\/g;s/"/\\"/g')
+    lf -remote "send $id updir"
+    lf -remote "send $id cd \"$pwd_shell\""
+}}
+
+cmd on-cd &{{
+	# display repository status in your prompt
+	if [ -d .git ] || [ -f .git ]; then
+		branch=$(git branch --show-current 2>/dev/null) || true
+		remote=$(git config --get branch.$branch.remote 2>/dev/null) || true
+		url=$(git remote get-url $remote 2>/dev/null) || true
+		fmt="\033[32;1m%u@%h\033[0m:\033[34;1m%w\033[0m\033[33;1m [GIT BRANCH:> $branch >> $url]\033[0m"
+	elif [ -d .hg ]; then
+		hg=$(hg branch 2>/dev/null) || true
+		fmt="\033[32;1m%u@%h\033[0m:\033[34;1m%w\033[0m\033[33;1m [HG BRANCH:> $hg]\033[0m"
+	elif [ -d .svn ]; then
+		svn=$(svn info 2>/dev/null | awk '/^URL: /{print $2}') || true
+		fmt="\033[32;1m%u@%h\033[0m:\033[34;1m%w\033[0m\033[33;1m [SVN URL:> $svn]\033[0m"
+	else
+		fmt="\033[32;1m%u@%h\033[0m:\033[34;1m%d\033[0m\033[1m%f\033[0m"
+	fi
+	lf -remote "send $id set promptfmt \"$fmt\""
+}}
+
+cmd extract ${{
+    set -f
+    case $f in
+        *.tar.bz|*.tar.bz2|*.tbz|*.tbz2) tar xjvf $f;;
+        *.tar.gz|*.tgz) tar xzvf $f;;
+        *.tar.xz|*.txz) tar xJvf $f;;
+        *.zip) unzip $f;;
+        *.rar) unrar x $f;;
+        *.7z) 7z x $f;;
+    esac
+}}
+
+cmd tar ${{
+    set -f
+    mkdir $1
+    cp -r $fx $1
+    tar czf $1.tar.gz $1
+    rm -rf $1
+}}
+
+cmd zip ${{
+    set -f
+    mkdir $1
+    cp -r $fx $1
+    zip -r $1.zip $1
+    rm -rf $1
+}}
+
+cmd toggle_preview %{{
+    if [ "$lf_preview" = true ]; then
+        lf -remote "send $id :set preview false; set ratios 1:5"
+    else
+        lf -remote "send $id :set preview true; set ratios 1:2:3"
+    fi
+}}
+
+# maps
+
+# basic usage
+map r rename
+map R :rename; cmd-delete-home
+map a push :create<space>
+map C edit-config
+map <enter> shell
+
+# movement
+map gh cd ~
+map gc cd ~/Code
+map gD cd ~/Documents
+map gd cd ~/Downloads
+map gp cd ~/Pictures
+map gv cd ~/Videos
+map g/ cd /
+map J move-parent down
+map K move-parent up
+
+# visual
+map zp toggle_preview
+
+# open files
+map x $$f
+map X !$f
+map o $xdg-open $f
+
+# trash
+map t
+map <backspace2> $trash put $fx
+map tl $trash ls | less -R
+map tp %trash put $fx
+map tr $trash restore
+map td $trash rm
+map tc %trash clear
+map tv $trash view
+
+# git
+map gitb :git_branch
+map gitp ${{clear; git pull --rebase || true; echo "press ENTER"; read ENTER}}
+map gits ${{clear; git status; echo "press ENTER"; read ENTER}}
+map gitl !{{clear; git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit}}

@@ -1,0 +1,12 @@
+//@import '/tmp/ags/scss/options';
+//@import './variables';
+
+// common
+@import './common/unset';
+@import './common/button';
+
+// widgets
+@import './widgets/bar';
+
+// additional overrides
+//@import '/tmp/ags/scss/additional';

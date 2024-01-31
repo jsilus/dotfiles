@@ -1,0 +1,16 @@
+#!/bin/sh
+
+[ -e "$1" ] || exit 1
+file="$(realpath $1)"
+
+if [ -d "$file" ]; then
+    tree -C "$file"
+    exit 0
+fi
+
+if [ "${file##*.}" = "md" ]; then
+    glow -s "~/.config/glow/mocha.json" -w "$2" "$file"
+    exit 0
+fi
+
+~/.local/share/go/bin/pistol "$file"

@@ -1,0 +1,20 @@
+#!/bin/sh
+
+file=$1
+w=$2
+h=$3
+x=$4
+y=$5
+
+print_kitty_image() {
+    kitty +kitten icat --silent --stdin no --transfer-mode memory --place "${w}x${h}@${x}x${y}" "$1" < /dev/null > /dev/tty
+}
+
+img="$(~/.config/lf/lfthumbnailer "$file")"
+
+if [ $? -eq 0 ]; then
+    print_kitty_image "$img"
+    exit 1
+fi
+
+~/.config/lf/text_preview "$file" "$w"

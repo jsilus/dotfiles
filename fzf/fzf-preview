@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+if [[ $# -ne 1 ]]; then
+    >&2 echo "usage: $0 FILENAME"
+    exit 1
+fi
+
+file="$(realpath "$1")"
+
+img="$(~/.config/lf/lfthumbnailer "$file")"
+
+if [ $? -eq 0 ]; then
+    dim=${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}
+    if [[ $dim = x ]]; then
+        dim=$(stty size < /dev/tty | awk '{print $2 "x" $1}')
+    elif ! [[ $KITTY_WINDOW_ID ]] && (( FZF_PREVIEW_TOP + FZF_PREVIEW_LINES == $(stty size < /dev/tty | awk '{print $1}') )); then
+        dim=${FZF_PREVIEW_COLUMNS}x$((FZF_PREVIEW_LINES - 1))
+    fi
+
+    kitty icat --clear --transfer-mode=memory --unicode-placeholder --stdin=no --place="$dim@0x0" "$img" | sed '$d' | sed $'$s/$/\e[m/'
+    exit 0
+fi
+
+~/.config/lf/text_preview "$file" "$FZF_PREVIEW_COLUMNS"
