@@ -16,7 +16,7 @@ require("lazy").setup({
     { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
 
     "nvim-treesitter/nvim-treesitter",
-    "luckasRanarison/tree-sitter-hypr",
+    { "luckasRanarison/tree-sitter-hyprlang", dependencies = "nvim-treesitter/nvim-treesitter" },
     "Fymyte/rasi.vim",
 
     "norcalli/nvim-colorizer.lua",

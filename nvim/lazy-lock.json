@@ -18,6 +18,6 @@
   "nvim-web-devicons": { "branch": "master", "commit": "aaec87dbdaa776bfa0a13c8694bec9bcb7454719" },
   "rasi.vim": { "branch": "main", "commit": "eac9969cf935cd4380987dc99bfa10d69d3f34a6" },
   "tidy.nvim": { "branch": "main", "commit": "2a23ba8cd39d3570595ba4e6890f8de4cd8116fd" },
-  "tree-sitter-hypr": { "branch": "master", "commit": "e60fc858e6327a15c0b26f99ec96945fecd1e4ee" },
+  "tree-sitter-hyprlang": { "branch": "master", "commit": "e60fc858e6327a15c0b26f99ec96945fecd1e4ee" },
   "which-key.nvim": { "branch": "main", "commit": "4433e5ec9a507e5097571ed55c02ea9658fb268a" }
 }

@@ -21,6 +21,12 @@ zstyle ':completion:*' menu select
 zmodload zsh/complist
 compinit
 
+set_title () {
+    printf "\033]0;zsh $(pwd | sed "s|$HOME|~|")\007" > /dev/tty
+}
+add-zsh-hook precmd set_title
+set_title
+
 
 zsh_add_plugin "zsh-users/zsh-autosuggestions"
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)

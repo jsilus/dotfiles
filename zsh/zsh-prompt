@@ -25,7 +25,7 @@ local _time_preexec () {
 add-zsh-hook preexec _time_preexec
 
 local _time_precmd () {
-    if [[ "$_time_recording" = "true" ]]; then
+    if [ "$_time_recording" = "true" ]; then
         unset -v _time_recording
         _time_prev=$(( $SECONDS - _time_prevstart ))
     fi

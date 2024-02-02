@@ -44,33 +44,30 @@ cmd on-redraw %{{
     elif [ $lf_width -le 160 ]; then
         lf -remote "send $id set ratios 1:2:3"
     else
-        lf -remote "send $id set ratios 1:2:3:5"
+        lf -remote "send $id set ratios 1:4:4"
     fi
 }}
 
-set promptfmt "\033[0;36m%d%f\033[0;33m%S"
 cmd on-cd &{{
-	fmt="\033[0;36m%d%f\033[0;33m%S"
+    # update window title
+    printf "\033]0;lf $(pwd | sed "s|$HOME|~|")\007" > /dev/tty
+
 	# display repository status in your prompt
-	if [ -d .git ] || [ -f .git ]; then
+	fmt="\033[0;36m%d%f%S"
+	if git status 2> /dev/null; then
 		branch=$(git branch --show-current 2>/dev/null) || true
 		remote=$(git config --get branch.$branch.remote 2>/dev/null) || true
 		url=$(git remote get-url $remote 2>/dev/null) || true
-		fmt="$fmt [GIT BRANCH:> $branch >> $url]\033[0m"
-	elif [ -d .hg ]; then
-		hg=$(hg branch 2>/dev/null) || true
-		fmt="$fmt [HG BRANCH:> $hg]\033[0m"
-	elif [ -d .svn ]; then
-		svn=$(svn info 2>/dev/null | awk '/^URL: /{print $2}') || true
-		fmt="$fmt [SVN URL:> $svn]\033[0m"
+		fmt="$fmt%S\033[0;32m$branch | $url\033[0m"
 	fi
 	lf -remote "send $id set promptfmt \"$fmt\""
 }}
+on-cd
 
 # commands
 cmd open &{{
     case $(file --mime-type -Lb $f) in
-        text/*) lf -remote "send $id \$$EDITOR \$fx";;
+        text/*|application/json|application/javascript) lf -remote "send $id \$$EDITOR \$fx";;
         *) for f in $fx; do $OPENER $f > /dev/null 2> /dev/null & done;;
     esac
 }}

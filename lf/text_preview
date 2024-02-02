@@ -13,6 +13,7 @@ if [ "${file##*.}" = "md" ]; then
     exit 0
 else
     bat -p --color=always "$file"
+    exit 0
 fi
 
 ~/.local/share/go/bin/pistol "$file"
