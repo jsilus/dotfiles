@@ -7,7 +7,7 @@ fi
 
 file="$(realpath "$1")"
 
-img="$(~/.config/lf/lfthumbnailer "$file")"
+img="$(thumbnailer "$file")"
 
 if [ $? -eq 0 ]; then
     dim=${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}

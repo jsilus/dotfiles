@@ -20,9 +20,51 @@ cmd edit-config ${{
 # visuals
 set info size
 set dircounts
+# set drawbox
 set cursorpreviewfmt "\033[4m"
+set cursorparentfmt "\033[4m"
+set tabstop 4
+
+set ratios 1:4:4
+cmd toggle_preview %{{
+    if [ "$lf_preview" = true ]; then
+        lf -remote "send $id :set preview false; set ratios 1:8"
+    else
+        lf -remote "send $id :set preview true; set ratios 1:4:4"
+    fi
+}}
+
 cmd on-select &{{
     lf -remote "send $id set statfmt \"$(eza -ld --color=always "$f")\""
+}}
+
+cmd on-redraw %{{
+    if [ $lf_width -le 80 ]; then
+        lf -remote "send $id set ratios 1:2"
+    elif [ $lf_width -le 160 ]; then
+        lf -remote "send $id set ratios 1:2:3"
+    else
+        lf -remote "send $id set ratios 1:2:3:5"
+    fi
+}}
+
+set promptfmt "\033[0;36m%d%f\033[0;33m%S"
+cmd on-cd &{{
+	fmt="\033[0;36m%d%f\033[0;33m%S"
+	# display repository status in your prompt
+	if [ -d .git ] || [ -f .git ]; then
+		branch=$(git branch --show-current 2>/dev/null) || true
+		remote=$(git config --get branch.$branch.remote 2>/dev/null) || true
+		url=$(git remote get-url $remote 2>/dev/null) || true
+		fmt="$fmt [GIT BRANCH:> $branch >> $url]\033[0m"
+	elif [ -d .hg ]; then
+		hg=$(hg branch 2>/dev/null) || true
+		fmt="$fmt [HG BRANCH:> $hg]\033[0m"
+	elif [ -d .svn ]; then
+		svn=$(svn info 2>/dev/null | awk '/^URL: /{print $2}') || true
+		fmt="$fmt [SVN URL:> $svn]\033[0m"
+	fi
+	lf -remote "send $id set promptfmt \"$fmt\""
 }}
 
 # commands
@@ -47,6 +89,50 @@ cmd create %{{
     done
 }}
 
+# y (select for copy) and P to paste soft-link
+# d (select for cut) and P to paste hard-link
+cmd link %{{
+    set -- $(cat ~/.local/share/lf/files)
+    mode="$1"
+    shift
+    if [ "$#" -lt 1 ]; then
+        lf -remote "send $id echo no files to link"
+        exit 0
+    fi
+    case "$mode" in
+        # symbolically copy mode is indicating a soft link
+        copy) ln -sr -t . -- "$@";;
+        # while a move mode is indicating a hard link
+        move) ln -t . -- "$@";;
+    esac
+    rm ~/.local/share/lf/files
+    lf -remote "send clear"
+}}
+
+cmd bulk-rename ${{
+    old="$(mktemp)"
+    new="$(mktemp)"
+    if [ -n "$fs" ]; then
+        fs="$(basename -a $fs)"
+    else
+        fs="$(ls)"
+    fi
+    printf '%s\n' "$fs" >"$old"
+    printf '%s\n' "$fs" >"$new"
+    $EDITOR "$new"
+    [ "$(wc -l < "$new")" -ne "$(wc -l < "$old")" ] && exit
+    paste "$old" "$new" | while IFS= read -r names; do
+        src="$(printf '%s' "$names" | cut -f1)"
+        dst="$(printf '%s' "$names" | cut -f2)"
+        if [ "$src" = "$dst" ] || [ -e "$dst" ]; then
+            continue
+        fi
+        mv -- "$src" "$dst"
+    done
+    rm -- "$old" "$new"
+    lf -remote "send $id unselect"
+}}
+
 cmd move-parent &{{
     dironly="setlocal '$(dirname "$PWD")' dironly"
     lf -remote "send $id :updir; $dironly true; $1; $dironly false; open"
@@ -67,24 +153,6 @@ cmd git_branch ${{
     lf -remote "send $id cd \"$pwd_shell\""
 }}
 
-cmd on-cd &{{
-	# display repository status in your prompt
-	if [ -d .git ] || [ -f .git ]; then
-		branch=$(git branch --show-current 2>/dev/null) || true
-		remote=$(git config --get branch.$branch.remote 2>/dev/null) || true
-		url=$(git remote get-url $remote 2>/dev/null) || true
-		fmt="\033[32;1m%u@%h\033[0m:\033[34;1m%w\033[0m\033[33;1m [GIT BRANCH:> $branch >> $url]\033[0m"
-	elif [ -d .hg ]; then
-		hg=$(hg branch 2>/dev/null) || true
-		fmt="\033[32;1m%u@%h\033[0m:\033[34;1m%w\033[0m\033[33;1m [HG BRANCH:> $hg]\033[0m"
-	elif [ -d .svn ]; then
-		svn=$(svn info 2>/dev/null | awk '/^URL: /{print $2}') || true
-		fmt="\033[32;1m%u@%h\033[0m:\033[34;1m%w\033[0m\033[33;1m [SVN URL:> $svn]\033[0m"
-	else
-		fmt="\033[32;1m%u@%h\033[0m:\033[34;1m%d\033[0m\033[1m%f\033[0m"
-	fi
-	lf -remote "send $id set promptfmt \"$fmt\""
-}}
 
 cmd extract ${{
     set -f
@@ -114,19 +182,13 @@ cmd zip ${{
     rm -rf $1
 }}
 
-cmd toggle_preview %{{
-    if [ "$lf_preview" = true ]; then
-        lf -remote "send $id :set preview false; set ratios 1:5"
-    else
-        lf -remote "send $id :set preview true; set ratios 1:2:3"
-    fi
-}}
-
 # maps
 
 # basic usage
 map r rename
 map R :rename; cmd-delete-home
+map <c-r> :bulk-rename
+map P :link
 map a push :create<space>
 map C edit-config
 map <enter> shell
@@ -150,9 +212,17 @@ map x $$f
 map X !$f
 map o $xdg-open $f
 
+# permissions
+map +r %chmod +r $fx
+map +w %chmod +w $fx
+map +x %chmod +x $fx
+map -r %chmod -r $fx
+map -w %chmod -w $fx
+map -x %chmod -x $fx
+
 # trash
 map t
-map <backspace2> $trash put $fx
+map <backspace2> %trash put $fx
 map tl $trash ls | less -R
 map tp %trash put $fx
 map tr $trash restore

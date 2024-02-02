@@ -19,3 +19,4 @@ vim.opt.updatetime = 50
 vim.opt.cursorline = true
 vim.opt.showmode = false
 vim.opt.scrolloff = 10
+vim.opt.termguicolors = true

@@ -11,6 +11,8 @@ fi
 if [ "${file##*.}" = "md" ]; then
     glow -s "~/.config/glow/mocha.json" -w "$2" "$file"
     exit 0
+else
+    bat -p --color=always "$file"
 fi
 
 ~/.local/share/go/bin/pistol "$file"

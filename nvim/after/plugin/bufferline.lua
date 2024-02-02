@@ -2,8 +2,14 @@ local mocha = require("catppuccin.palettes").get_palette "mocha"
 local bufferline = require('bufferline')
 bufferline.setup {
     options = {
-        -- indicator = {style = 'underline'},
+        mode = "buffer",
+        themable = true,
+        indicator = {
+            style = 'none',
+        },
         diagnostics = "nvim_lsp",
+        always_show_bufferline = false,
+        separator_style = { ' ', ' ' },
         offsets = {
             {
                 filetype = "NvimTree",
@@ -12,14 +18,60 @@ bufferline.setup {
                 separator = true,
             },
         },
-
     },
     highlights = require("catppuccin.groups.integrations.bufferline").get {
+
         styles = { "italic", "bold" },
         custom = {
             all = {
-                fill = {bg = ""},
-                indicator_selected = {fg = mocha.teal},
+                fill = {
+                    fg = mocha.blue,
+                    bg = "NONE",
+                },
+                background = {
+                    fg = mocha.blue,
+                    bg = "NONE",
+                },
+                close_button = {
+                    fg = mocha.blue,
+                    bg = "NONE",
+                },
+                close_button_visible = {
+                    fg = mocha.base,
+                    bg = mocha.blue,
+                },
+                close_button_selected = {
+                    fg = mocha.base,
+                    bg = mocha.blue,
+                },
+                buffer_visible = {
+                    fg = mocha.base,
+                    bg = mocha.blue,
+                },
+                buffer_selected = {
+                    fg = mocha.base,
+                    bg = mocha.blue,
+                },
+                separator = {
+                    fg = "NONE",
+                    bg = "NONE",
+                },
+                separator_selected = {
+                    fg = "NONE",
+                    bg = "NONE",
+                },
+                offset_separator = {
+                    fg = mocha.surface1,
+                    bg = "NONE",
+                },
+                indicator_visible = {
+                    fg = mocha.blue,
+                    bg = mocha.blue
+                },
+                indicator_selected = {
+                    fg = mocha.blue,
+                    bg = mocha.blue
+                },
             },
         },
     },

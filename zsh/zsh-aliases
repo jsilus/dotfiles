@@ -1,6 +1,7 @@
 #!/bin/bash
 
 alias ls="eza -l --no-quotes --group-directories-first"
+alias la="eza -la --no-quotes --group-directories-first"
 alias :q="exit"
 
 alias grep="grep --color=auto"

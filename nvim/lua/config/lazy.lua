@@ -47,7 +47,7 @@ require("lazy").setup({
 
     -- UI
     { "nvim-lualine/lualine.nvim", dependencies = { "nvim-tree/nvim-web-devicons" } },
-    { "akinsho/bufferline.nvim", version = "*", dependencies = 'nvim-tree/nvim-web-devicons' },
+    { "akinsho/bufferline.nvim", version = "*", dependencies = { 'nvim-tree/nvim-web-devicons', 'catppuccin' } },
     { "lewis6991/gitsigns.nvim", opts = {} },
     {
         "folke/which-key.nvim",
