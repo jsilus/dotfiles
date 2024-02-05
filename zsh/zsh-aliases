@@ -3,6 +3,7 @@
 alias ls="eza -l --no-quotes --group-directories-first"
 alias la="eza -la --no-quotes --group-directories-first"
 alias :q="exit"
+alias bash="HISTFILE=/dev/null bash"
 
 alias grep="grep --color=auto"
 alias egrep="egrep --color=auto"

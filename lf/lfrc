@@ -48,6 +48,7 @@ cmd on-redraw %{{
     fi
 }}
 
+set promptfmt "\033[0;36m%d%f%S"
 cmd on-cd &{{
     # update window title
     printf "\033]0;lf $(pwd | sed "s|$HOME|~|")\007" > /dev/tty
@@ -68,6 +69,7 @@ on-cd
 cmd open &{{
     case $(file --mime-type -Lb $f) in
         text/*|application/json|application/javascript) lf -remote "send $id \$$EDITOR \$fx";;
+        application/zip) lf -remote "send $id %unpack \$fx";;
         *) for f in $fx; do $OPENER $f > /dev/null 2> /dev/null & done;;
     esac
 }}
