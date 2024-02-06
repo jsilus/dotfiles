@@ -27,10 +27,24 @@ set tabstop 4
 
 set ratios 1:4:4
 cmd toggle_preview %{{
-    if [ "$lf_preview" = true ]; then
-        lf -remote "send $id :set preview false; set ratios 1:8"
+    if [ $lf_width -le 70 ]; then
+        if [ "$lf_preview" = true ]; then
+            lf -remote "send $id :set preview false; set ratios 1"
+        else
+            lf -remote "send $id :set ratios 1:2; set preview true"
+        fi
+    elif [ $lf_width -le 160 ]; then
+        if [ "$lf_preview" = true ]; then
+            lf -remote "send $id :set preview false; set ratios 1:4"
+        else
+            lf -remote "send $id :set preview true; set ratios 1:2:2"
+        fi
     else
-        lf -remote "send $id :set preview true; set ratios 1:4:4"
+        if [ "$lf_preview" = true ]; then
+            lf -remote "send $id :set preview false; set ratios 1:8"
+        else
+            lf -remote "send $id :set preview true; set ratios 1:4:4"
+        fi
     fi
 }}
 
@@ -39,12 +53,24 @@ cmd on-select &{{
 }}
 
 cmd on-redraw %{{
-    if [ $lf_width -le 80 ]; then
-        lf -remote "send $id set ratios 1:2"
+    if [ $lf_width -le 70 ]; then
+        if [ "$lf_preview" = true ]; then
+            lf -remote "send $id set ratios 1:2"
+        else
+            lf -remote "send $id set ratios 1"
+        fi
     elif [ $lf_width -le 160 ]; then
-        lf -remote "send $id set ratios 1:2:3"
+        if [ "$lf_preview" = true ]; then
+            lf -remote "send $id set ratios 1:2:2"
+        else
+            lf -remote "send $id set ratios 1:4"
+        fi
     else
-        lf -remote "send $id set ratios 1:4:4"
+        if [ "$lf_preview" = true ]; then
+            lf -remote "send $id set ratios 1:4:4"
+        else
+            lf -remote "send $id set ratios 1:8"
+        fi
     fi
 }}
 
