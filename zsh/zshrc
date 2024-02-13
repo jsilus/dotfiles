@@ -40,6 +40,6 @@ zsh_add_file "zsh-fzf"
 zsh_add_file "zsh-keybinds"
 
 
-ascii
+[[ -o interactive ]] && ascii
 
 autopair-init
