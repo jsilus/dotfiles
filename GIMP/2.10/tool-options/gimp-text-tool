@@ -1,7 +1,0 @@
-# GIMP gimp-text-tool options
-
-(foreground (color-rgb 0.066666666666666666 0.066666666666666666 0.10588235294117647))
-(palette "Catppuccin Mocha")
-(font "Sans-serif")
-
-# end of gimp-text-tool options
