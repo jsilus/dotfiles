@@ -12,7 +12,8 @@ class PopupWindow extends Window {
             ...rest,
             name,
             popup: true,
-            focusable: true,
+            keymode: 'exclusive',
+            layer: 'overlay',
             class_names: ['popup-window', name],
         });
 
@@ -20,12 +21,13 @@ class PopupWindow extends Window {
         this.revealer = Widget.Revealer({
             transition,
             child,
-            transitionDuration: 500,
+            transitionDuration: 200,
             reveal_child: visible,
-            connections: [[App, (_, wname, visible) => {
-                if (wname === name)
-                    this.revealer.reveal_child = visible;
-            }]],
+            setup: self => self
+                .hook(App, (_, wname, visible) => {
+                    if (wname === name)
+                        this.revealer.reveal_child = visible;
+                }),
         });
 
         this.child = Widget.Box({

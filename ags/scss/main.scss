@@ -4,9 +4,11 @@
 // common
 @import './common/unset';
 @import './common/button';
+@import './common/slider';
 
 // widgets
 @import './widgets/bar';
+@import './widgets/quicksettings';
 
 // additional overrides
 //@import '/tmp/ags/scss/additional';

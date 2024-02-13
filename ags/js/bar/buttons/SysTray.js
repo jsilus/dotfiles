@@ -1,5 +1,4 @@
-import SystemTray from 'resource:///com/github/Aylur/ags/service/systemtray.js';
-import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+const systemtray = await Service.import('systemtray');
 
 const SysTrayItem = item => Widget.Button({
     child: Widget.Icon().bind('icon', item, 'icon'),
@@ -10,4 +9,5 @@ const SysTrayItem = item => Widget.Button({
 
 export default () => Widget.Box({
     className: 'tray',
-}).bind('children', SystemTray, 'items', i => i.map(SysTrayItem))
+    children: systemtray.bind('items').transform(i => i.map(SysTrayItem)),
+})

@@ -1,32 +1,25 @@
-// importing
-import Widget from 'resource:///com/github/Aylur/ags/widget.js';
-
-import Workspaces from './buttons/Workspaces.js';
-import FocusedClient from './buttons/FocusedClient.js';
-import Clock from './buttons/Clock.js';
-import SysTray from './buttons/SysTray.js';
-import Notification from './buttons/Notification.js';
-import QuickSettingsToggle from './buttons/QuickSettingsToggle.js';
+import * as Button from './buttons/index.js';
 
 const Left = (monitor) => Widget.Box({
     children: [
-        Workspaces({monitor: monitor}),
-        FocusedClient(),
+        Button.Workspaces({monitor: monitor}),
+        Button.FocusedClient(),
     ],
 });
 
 const Center = () => Widget.Box({
     children: [
-        Clock(),
-        Notification(),
+        Button.Clock(),
+        Button.Notification(),
     ],
 });
 
 const Right = () => Widget.Box({
     hpack: 'end',
     children: [
-        SysTray(),
-        QuickSettingsToggle(),
+        Button.SysTray(),
+        Button.Battery(),
+        Button.QuickSettingsToggle(),
     ],
 });
 

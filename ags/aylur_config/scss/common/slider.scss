@@ -12,7 +12,7 @@
         min-width:  $width;
 
         highlight, progress{
-            border-radius: max($radii - $border-width, 0);
+            border-radius: max($radii, 0);
             background-image: $gradient;
             min-height: $width;
             min-width:  $width;

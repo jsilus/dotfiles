@@ -15,9 +15,7 @@ autoReloadCss();
 
 export default {
     windows: windows().flat(1),
-    maxStreamVolume: 1.05,
-    cacheNotificationActions: true,
     closeWindowDelay: {
-        quicksettings: 500,
+        quicksettings: 200,
     },
 };

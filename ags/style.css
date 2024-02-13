@@ -37,3 +37,22 @@
   .tray button:active, .tray button.active {
     background-color: #cdd6f4;
     color: #7f849c; }
+
+window#quicksettings .window-content {
+  background-color: rgba(30, 30, 46, 0.75);
+  padding: 0.5em 0.5em 0.5em 0.5em; }
+  window#quicksettings .window-content .brightness-slider {
+    all: unset;
+    padding-right: 1em; }
+    window#quicksettings .window-content .brightness-slider * {
+      all: unset; }
+    window#quicksettings .window-content .brightness-slider trough {
+      background-color: #cba6f7; }
+      window#quicksettings .window-content .brightness-slider trough highlight {
+        min-width: 10em;
+        min-height: 0.1em;
+        background-color: #1e1e2e; }
+    window#quicksettings .window-content .brightness-slider slider {
+      min-width: 1em;
+      min-height: 1em;
+      background-color: #f9e2af; }

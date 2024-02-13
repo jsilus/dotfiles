@@ -1,16 +1,20 @@
-import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
-import Widget from 'resource:///com/github/Aylur/ags/widget.js';
-import { execAsync } from 'resource:///com/github/Aylur/ags/utils.js';
+const hyprland = await Service.import('hyprland');
 
-const dispatch = ws => () => execAsync(`hyprctl dispatch workspace ${ws}`);
-const onSameMonitor = (workspaces, monitor) => workspaces.filter(ws => ws.monitorID === monitor && ws.id > 0 && ws.id <= 10);
-
-const WorkspaceItem = ws => Widget.Button({
-    onClicked: dispatch(ws),
-    child: Widget.Label(`${ws}`),
-}).bind('className', Hyprland, 'monitors', ms => ms.find(m => m.activeWorkspace.id === ws) ? 'active' : '');
+const dispatch = ws => hyprland.sendMessage(`dispatch workspace ${ws}`);
 
 export default ({monitor} = {monitor : 0}) => Widget.Box({
     className: 'workspaces',
-}).bind('children', Hyprland, 'workspaces',
-    wss => onSameMonitor(wss, monitor).map(ws => ws.id).sort((a, b) => a - b).map(WorkspaceItem));
+    children: Array.from({ length: 10 }, (_, i) => i + 1).map(i => Widget.Button({
+        attribute: i,
+        label: `${i}`,
+        onClicked: () => dispatch(i),
+    })),
+
+    setup: self => self
+        .hook(hyprland, () => self.children.forEach(btn => {
+            btn.visible = hyprland.workspaces.some(ws => ws.id === btn.attribute && ws.monitorID === monitor);
+        }))
+        .hook(hyprland.active.workspace, () => self.children.forEach(btn => {
+            btn.className = hyprland.active.workspace.id === btn.attribute ? 'active' : '';
+        }))
+})

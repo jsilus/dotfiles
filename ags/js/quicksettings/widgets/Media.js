@@ -1,5 +1,4 @@
-import Mpris from 'resource:///com/github/Aylur/ags/service/mpris.js';
-import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+const mpris = await Service.import('mpris');
 
 const Player = player => Widget.Button({
     className: 'media',
@@ -12,4 +11,5 @@ const Player = player => Widget.Button({
 
 export default () => Widget.Box({
     vertical: true,
-}).bind('children', Mpris, 'players', p => p.map(Player))
+    children: mpris.bind('players').transform(p => p.map(Player)),
+})

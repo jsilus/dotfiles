@@ -1,7 +1,8 @@
-import Hyprland from 'resource:///com/github/Aylur/ags/service/hyprland.js';
-import Widget from 'resource:///com/github/Aylur/ags/widget.js';
+const hyprland = await Service.import('hyprland');
 
 export default () => Widget.Label({
     className: 'client-title',
-    label: Hyprland.active.client.bind('title'),
+
+    setup: self => self
+        .hook(hyprland.active.client, () => self.label = hyprland.active.client.title),
 });
