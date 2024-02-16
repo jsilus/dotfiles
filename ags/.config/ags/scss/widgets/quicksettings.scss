@@ -1,0 +1,7 @@
+window#quicksettings .window-content {
+    background-color: transparentize(#1e1e2e, 0.25);
+    padding: 0.5em 0.5em 0.5em 0.5em;
+    .brightness-slider {
+        @include slider($slider-width: 10em);
+    }
+}

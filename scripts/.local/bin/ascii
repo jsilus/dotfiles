@@ -1,0 +1,111 @@
+#!/bin/sh
+
+ascii_dir="$HOME/.local/share/ascii"
+state="$ascii_dir/.state"
+
+mkdir -p "$ascii_dir"
+
+category_enabled () {
+    [ -f "$state" ] && grep "$1" "$state" > /dev/null
+}
+
+random_ascii () {
+    files="$(find $ascii_dir/* -maxdepth 0 -type f 2> /dev/null)"
+
+    [ -f "$state" ] && while read -r category; do
+        files="$files $(find "$ascii_dir/$category" -type f 2> /dev/null)"
+    done < "$state"
+    [ -n "$files" ] && cat "$(shuf -en1 -- $files)" || echo "No categories enabled"
+}
+
+ascii_help () {
+    echo "ascii: print out a random ascii art in a random color"
+    echo "       Put files to be printed in ~/.local/share/ascii/"
+    echo "       Folders will be interpreted as toggleable categories"
+    echo "Options:"
+    echo "    -l, --list                display all categories"
+    echo "    -t, --toggle {category}   toggle hidden ascii"
+    echo "    -h, --help                display this message"
+    echo "    -v, --version             print functions version"
+}
+
+ascii_version () {
+    echo "v3"
+}
+
+ascii_list_categories () {
+    dirs="$(cd "$ascii_dir" && ls -d */ | cut -f1 -d'/')"
+
+    for dir in $dirs; do
+        visible=disabled
+        color=red
+        category_enabled "$dir" && visible=enabled && color=green
+
+        color reset
+        printf %10s $dir
+        echo -n ":"
+        color $color
+        printf %9s\\n $visible
+        color reset
+    done
+}
+
+ascii_toggle_category () {
+    for dir in $(cd "$ascii_dir" && ls -d */ .*/ | cut -f1 -d'/'); do
+        if [ "$dir" = "$1" ]; then
+            visible=enabled
+            color=green
+            category_enabled "$1" && visible=disabled && color=red
+
+            if [ "$visible" = "enabled" ]; then
+                echo "$dir" >> "$state"
+            else
+                grep -v "$dir" "$state" | sponge "$state"
+            fi
+
+            color reset
+            echo -n "$1 "
+            color $color
+            echo $visible
+            color reset
+            exit 0
+        fi
+    done
+    color reset
+    echo "Not a valid category"
+    exit 1
+}
+
+opts=$(! getopt -l "help,version,list,toggle:" -o "hvlt:" -- $@ 2> /dev/null) && ascii_help && exit 1
+eval set -- "$opts"
+
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+        -h|--help)
+            ascii_help
+            exit 0
+            ;;
+        -v|--version)
+            ascii_version
+            exit 0
+            ;;
+        -l|--list)
+            ascii_list_categories
+            exit 0
+            ;;
+        -t|--toggle)
+            shift
+            ascii_toggle_category "$1"
+            exit 0
+            ;;
+        --)
+            shift
+            break
+            ;;
+    esac
+    shift
+done
+
+color $(shuf -en1 -- red green yellow blue purple cyan)
+random_ascii
+color reset

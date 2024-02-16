@@ -1,0 +1,7 @@
+#!/bin/sh
+
+FILE=$(basename $1)
+EXT=${FILE##*.}
+NAME=${FILE%.*}
+
+ffmpeg -i $FILE -map_metadata -1 -map_chapters -1 -vf scale="iw/2:ih/2" "$NAME-out.$EXT" && rm $1 && mv "$NAME-out.$EXT" $1

@@ -1,0 +1,23 @@
+
+PATH=$PATH:"$HOME/.local/bin"
+export LS_COLORS="*~=0;38;2;88;91;112:ln=01;36:or=31;01:tw=34:ow=34:st=01;34:di=01;34:pi=33:so=01;35:bd=33;01:cd=33;01:su=37;41:sg=01;32:ex=01;32:fi=00:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=00;33:*.jpeg=00;33:*.mjpg=00;33:*.mjpeg=00;33:*.webp=00;33:*.gif=00;33:*.bmp=00;33:*.pbm=00;33:*.pgm=00;33:*.ppm=00;33:*.tga=00;33:*.xbm=00;33:*.xpm=00;33:*.tif=00;33:*.tiff=00;33:*.png=00;38;5;215:*.svg=00;33:*.svgz=00;33:*.mng=00;33:*.pcx=00;33:*.mov=00;35:*.mpg=00;35:*.mpeg=00;35:*.m2v=00;33:*.mkv=00;33:*.webm=00;35:*.ogm=00;33:*.mp4=00;35:*.m4v=00;35:*.mp4v=00;35:*.vob=00;35:*.qt=00;33:*.nuv=00;33:*.wmv=00;35:*.asf=00;33:*.rm=00;33:*.rmvb=00;33:*.flc=00;33:*.avi=00;35:*.fli=00;33:*.flv=00;35:*.gl=00;33:*.dl=00;33:*.xcf=00;33:*.xwd=00;33:*.yuv=00;33:*.cgm=00;33:*.emf=00;33:*.ogv=00;33:*.ogx=00;33:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36"
+
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_STATE_HOME="$HOME/.local/state"
+export XDG_CACHE_HOME="$HOME/.cache"
+
+export EDITOR="nvim"
+export MANPAGER="nvim +Man!"
+
+export TERMINFO="$XDG_DATA_HOME"/terminfo
+export TERMINFO_DIRS="$XDG_DATA_HOME/terminfo:/user/shar/terminfo"
+export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
+export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc"
+export CARGO_HOME="$XDG_DATA_HOME/cargo"
+export WINEPREFIX="$XDG_DATA_HOME/wine"
+export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
+export GNUPGHOME="$XDG_DATA_HOME/gnupg"
+export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
+export GOPATH="$XDG_DATA_HOME/go"
+PATH="$PATH:$XDG_DATA_HOME/go/bin"

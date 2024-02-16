@@ -1,0 +1,262 @@
+
+# shell options
+set shell sh
+set shellopts '-eu'
+set ifs "\n"
+set icons
+
+# basic options
+set previewer ~/.config/lf/lf_kitty_preview
+set cleaner ~/.config/lf/lf_kitty_clean
+set period 1
+set scrolloff 10
+
+# edit and hot reload config
+cmd edit-config ${{
+    $EDITOR ~/.config/lf/lfrc
+    lf -remote "send $id source ~/.config/lf/lfrc"
+}}
+
+# visuals
+set info size
+set dircounts
+# set drawbox
+set cursorpreviewfmt "\033[4m"
+set cursorparentfmt "\033[4m"
+set tabstop 4
+
+set ratios 1:4:4
+cmd toggle_preview %{{
+    if [ $lf_width -le 70 ]; then
+        if [ "$lf_preview" = true ]; then
+            lf -remote "send $id :set preview false; set ratios 1"
+        else
+            lf -remote "send $id :set ratios 1:2; set preview true"
+        fi
+    elif [ $lf_width -le 160 ]; then
+        if [ "$lf_preview" = true ]; then
+            lf -remote "send $id :set preview false; set ratios 1:4"
+        else
+            lf -remote "send $id :set preview true; set ratios 1:2:2"
+        fi
+    else
+        if [ "$lf_preview" = true ]; then
+            lf -remote "send $id :set preview false; set ratios 1:8"
+        else
+            lf -remote "send $id :set preview true; set ratios 1:4:4"
+        fi
+    fi
+}}
+
+cmd on-select &{{
+    lf -remote "send $id set statfmt \"$(eza -ld --color=always "$f")\""
+}}
+
+cmd on-redraw %{{
+    if [ $lf_width -le 70 ]; then
+        if [ "$lf_preview" = true ]; then
+            lf -remote "send $id set ratios 1:2"
+        else
+            lf -remote "send $id set ratios 1"
+        fi
+    elif [ $lf_width -le 160 ]; then
+        if [ "$lf_preview" = true ]; then
+            lf -remote "send $id set ratios 1:2:2"
+        else
+            lf -remote "send $id set ratios 1:4"
+        fi
+    else
+        if [ "$lf_preview" = true ]; then
+            lf -remote "send $id set ratios 1:4:4"
+        else
+            lf -remote "send $id set ratios 1:8"
+        fi
+    fi
+}}
+
+set promptfmt "\033[0;36m%d%f%S"
+cmd on-cd &{{
+    # update window title
+    printf "\033]0;lf $(pwd | sed "s|$HOME|~|")\007" > /dev/tty
+
+	# display repository status in your prompt
+	fmt="\033[0;36m%d%f%S"
+	if git status 2> /dev/null; then
+		branch=$(git branch --show-current 2>/dev/null) || true
+		remote=$(git config --get branch.$branch.remote 2>/dev/null) || true
+		url=$(git remote get-url $remote 2>/dev/null) || true
+		fmt="$fmt%S\033[0;32m$branch | $url\033[0m"
+	fi
+	lf -remote "send $id set promptfmt \"$fmt\""
+}}
+on-cd
+
+# commands
+cmd open &{{
+    case $(file --mime-type -Lb $f) in
+        text/*|application/json|application/javascript) lf -remote "send $id \$$EDITOR \$fx";;
+        application/zip) lf -remote "send $id %unpack \$fx";;
+        *) for f in $fx; do $OPENER $f > /dev/null 2> /dev/null & done;;
+    esac
+}}
+
+cmd q :quit
+
+cmd create %{{
+    for arg in "$@"; do
+        if [ "${arg: -1}" = "/" ]; then
+            [ -e "${arg:0:-1}" ] && printf "file/folder exists" || mkdir -p "$arg"
+        else
+            [ -e "$arg" ] && printf "file/folder exists" && exit 0
+            [[ "$arg" == *"/"* ]] && mkdir -p "${arg%/*}"
+            touch "$arg"
+        fi
+    done
+}}
+
+# y (select for copy) and P to paste soft-link
+# d (select for cut) and P to paste hard-link
+cmd link %{{
+    set -- $(cat ~/.local/share/lf/files)
+    mode="$1"
+    shift
+    if [ "$#" -lt 1 ]; then
+        lf -remote "send $id echo no files to link"
+        exit 0
+    fi
+    case "$mode" in
+        # symbolically copy mode is indicating a soft link
+        copy) ln -sr -t . -- "$@";;
+        # while a move mode is indicating a hard link
+        move) ln -t . -- "$@";;
+    esac
+    rm ~/.local/share/lf/files
+    lf -remote "send clear"
+}}
+
+cmd bulk-rename ${{
+    old="$(mktemp)"
+    new="$(mktemp)"
+    if [ -n "$fs" ]; then
+        fs="$(basename -a $fs)"
+    else
+        fs="$(ls)"
+    fi
+    printf '%s\n' "$fs" >"$old"
+    printf '%s\n' "$fs" >"$new"
+    $EDITOR "$new"
+    [ "$(wc -l < "$new")" -ne "$(wc -l < "$old")" ] && exit
+    paste "$old" "$new" | while IFS= read -r names; do
+        src="$(printf '%s' "$names" | cut -f1)"
+        dst="$(printf '%s' "$names" | cut -f2)"
+        if [ "$src" = "$dst" ] || [ -e "$dst" ]; then
+            continue
+        fi
+        mv -- "$src" "$dst"
+    done
+    rm -- "$old" "$new"
+    lf -remote "send $id unselect"
+}}
+
+cmd move-parent &{{
+    dironly="setlocal '$(dirname "$PWD")' dironly"
+    lf -remote "send $id :updir; $dironly true; $1; $dironly false; open"
+}}
+
+cmd delete ${{
+    set -f
+    printf "$fx\n"
+    printf "delete?[y/N]"
+    read ans
+    [ "$ans" = "y" ] && rm -rf $fx
+}}
+
+cmd git_branch ${{
+    git branch | fzf | xargs git checkout
+    pwd_shell=$(pwd | sed 's/\\/\\\\/g;s/"/\\"/g')
+    lf -remote "send $id updir"
+    lf -remote "send $id cd \"$pwd_shell\""
+}}
+
+
+cmd extract ${{
+    set -f
+    case $f in
+        *.tar.bz|*.tar.bz2|*.tbz|*.tbz2) tar xjvf $f;;
+        *.tar.gz|*.tgz) tar xzvf $f;;
+        *.tar.xz|*.txz) tar xJvf $f;;
+        *.zip) unzip $f;;
+        *.rar) unrar x $f;;
+        *.7z) 7z x $f;;
+    esac
+}}
+
+cmd tar ${{
+    set -f
+    mkdir $1
+    cp -r $fx $1
+    tar czf $1.tar.gz $1
+    rm -rf $1
+}}
+
+cmd zip ${{
+    set -f
+    mkdir $1
+    cp -r $fx $1
+    zip -r $1.zip $1
+    rm -rf $1
+}}
+
+# maps
+
+# basic usage
+map r rename
+map R :rename; cmd-delete-home
+map <c-r> :bulk-rename
+map P :link
+map a push :create<space>
+map C edit-config
+map <enter> shell
+
+# movement
+map gh cd ~
+map gc cd ~/Code
+map gD cd ~/Documents
+map gd cd ~/Downloads
+map gp cd ~/Pictures
+map gv cd ~/Videos
+map g/ cd /
+map J move-parent down
+map K move-parent up
+
+# visual
+map zp toggle_preview
+
+# open files
+map x $$f
+map X !$f
+map o $xdg-open $f
+
+# permissions
+map +r %chmod +r $fx
+map +w %chmod +w $fx
+map +x %chmod +x $fx
+map -r %chmod -r $fx
+map -w %chmod -w $fx
+map -x %chmod -x $fx
+
+# trash
+map t
+map <backspace2> %trash put $fx
+map tl $trash ls | less -R
+map tp %trash put $fx
+map tr $trash restore
+map td $trash rm
+map tc %trash clear
+map tv $trash view
+
+# git
+map gitb :git_branch
+map gitp ${{clear; git pull --rebase || true; echo "press ENTER"; read ENTER}}
+map gits ${{clear; git status; echo "press ENTER"; read ENTER}}
+map gitl !{{clear; git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit}}

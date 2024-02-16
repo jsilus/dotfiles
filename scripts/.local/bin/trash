@@ -1,0 +1,172 @@
+#!/bin/sh
+
+trash_dir="$XDG_DATA_HOME/trash"
+index="$trash_dir/index.csv"
+mkdir -p "$trash_dir"
+touch "$index"
+
+trash_auto_empty () {
+    max_time=604800
+    current_time="$(date +%s)"
+    old_uuids=""
+
+    while IFS="," read -r timestamp uuid orig; do
+        if [ $(( current_time - timestamp )) -gt $max_time ]; then
+            rm -rf "$trash_dir/$uuid" && old_uuids="$old_uuids -e $uuid"
+        fi
+    done < "$index"
+
+    if [ -n "$old_uuids" ]; then
+        grep -v $old_uuids < "$index" > "$index.tmp"
+        mv -f "$index.tmp" "$index"
+    fi
+}
+
+trash_put () {
+    [ ! -e "$1" ] && exit 1
+    orig="$(realpath -s "$1")"
+    case "$orig" in
+        "$trash_dir"*) exit 1;;
+    esac
+
+    uuid="$(uuidgen)"
+
+    mv "$orig" "$trash_dir/$uuid"
+
+    echo "$(date +%s),$uuid,$orig" >> "$index"
+}
+
+trash_get_info () {
+    file="$1"
+    file="$(( file + 1 ))"
+    info=$(sed -n "${file}p" "$index")
+    echo "$(echo "$info" | cut -d ',' -f "$2")"
+}
+
+trash_view () {
+    idx=-1
+    while IFS="," read -r timestamp uuid orig; do
+        idx=$(( idx + 1 ))
+        color purple
+        printf "%3s " $idx
+        color yellow
+        echo -n "$(date -d @$timestamp '+%Y-%m-%d %H:%M:%S') "
+        color reset
+        echo ${orig}
+    done < "$index" | fzf --ansi -m --header 'Press TAB to select multiple' --preview 'trash preview {}'
+}
+
+trash_restore () {
+    [ ! -f "$index" ] && exit 0
+
+    files="$(trash_view)" || exit 0
+
+    echo "$files" | while read -r file; do
+        file="${file%% *}"
+        uuid=$(trash_get_info $file 2)
+        orig=$(trash_get_info $file "3-")
+        mv "$trash_dir/$uuid" "$orig" && sed -i "$(( file + 1 ))d" "$index"
+    done
+}
+
+trash_delete () {
+    [ ! -f "$index" ] && exit 0
+
+    files="$(trash_view)" || exit 0
+
+    echo "$files" | while read -r file; do
+        file="${file%% *}"
+        orig=$(trash_get_info $file "3-")
+        timestamp=$(trash_get_info $file 1)
+        color yellow
+        echo -n "$(date -d @$timestamp '+%Y-%m-%d %H:%M:%S') "
+        color reset
+        echo ${orig}
+    done
+    echo -n "Are you sure you want to permanently delete these files [y/N]? "
+    read confirm
+    [ "$confirm" = y ] || [ "$confirm" = Y ] || exit 0
+
+    echo "$files" | while read -r file; do
+        file="${file%% *}"
+        uuid=$(trash_get_info $file 2)
+        orig=$(trash_get_info $file "3-")
+        rm -rf "$trash_dir/$uuid" && sed -i "$(( file + 1 ))d" "$index"
+    done
+}
+
+trash_print () {
+    [ ! -f "$index" ] && exit 0
+
+    while IFS="," read -r timestamp uuid orig; do
+        color yellow
+        echo -n "$(date -d @$timestamp '+%Y-%m-%d %H:%M:%S') "
+        color reset
+        echo ${orig}
+    done < "$index"
+}
+
+trash_clear () {
+    echo -n "Are you sure you want to permanently delete all files [y/N]? "
+    read confirm
+    [ "$confirm" = y ] || [ "$confirm" = Y ] || exit 0
+    rm -rf "$trash_dir"
+}
+
+trash_preview () {
+    file="$trash_dir/$(trash_get_info $1 2)"
+    ~/.config/fzf/fzf-preview "$file"
+}
+
+trash_help () {
+    echo "trash: moves files to a trash can to be restored if needed"
+    echo "Options:"
+    echo "trash put <files>    move files to the trash can"
+    echo "trash print/ls       view the trash can"
+    echo "trash view           inspect the trash can items"
+    echo "trash restore        pull up a menu to restore an item"
+    echo "trash delete/rm      permanently delete a file in the trash"
+    echo "trash clear          clears all files in the trash"
+    echo "trash help           print this message"
+}
+
+trash_auto_empty
+case $1 in
+    put)
+        shift
+        [ "$#" -eq 0 ] && exit 1
+        echo -n "Are you sure you want to trash these files [y/N]? "
+        read confirm
+        [ "$confirm" = y ] || [ "$confirm" = Y ] || exit 0
+
+        for var in "$@"; do
+            trash_put "$var"
+        done
+        ;;
+    print|ls)
+        trash_print
+        ;;
+    view)
+        trash_view > /dev/null
+        exit 0
+        ;;
+    restore)
+        trash_restore
+        ;;
+    delete|rm)
+        trash_delete
+        ;;
+    clear)
+        trash_clear
+        ;;
+    help)
+        trash_help
+        ;;
+    preview)
+        trash_preview $2
+        ;;
+    *)
+        trash_help
+        exit 1
+        ;;
+esac

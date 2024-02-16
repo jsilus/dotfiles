@@ -1,0 +1,27 @@
+#!/bin/sh
+
+[ -e "$1" ] || exit 1
+file="$(realpath "$1")"
+
+if [ -d "$file" ]; then
+    tree -C "$file"
+    exit 0
+fi
+
+mime="$(file -Lb --mime-type "$file")"
+
+case "$mime" in
+    application/zip)
+        unzip -l -- "$file" | awk 'FNR>3 {$1=$2=$3=""; print substr($0,4)}' | tree -C --fromfile
+        exit 0
+        ;;
+esac
+
+case "$file" in
+    *.md)
+        glow -s "~/.config/glow/mocha.json" -w "$2" "$file"
+        exit 0
+        ;;
+esac
+
+bat -p --color=always "$file"

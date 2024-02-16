@@ -1,0 +1,62 @@
+#!/bin/sh
+
+color_help () {
+    echo "color: set the terminal to a color"
+    echo "Usage: color <color/list/help>, where color is"
+    echo "       black, red, green, yellow, blue,"
+    echo "       purple, cyan, lightgray, darkgray,"
+    echo "       lightred, lightgreen, lightyellow,"
+    echo "       lightblue, lightpurple, lightcyan,"
+    echo "       white, reset"
+}
+[ $# -eq 0 ] && color_help && exit 1
+
+print_color () {
+    color=""
+    case "$1" in
+        black)          color="0;30";;
+        red)            color="0;31";;
+        green)          color="0;32";;
+        yellow)         color="0;33";;
+        blue)           color="0;34";;
+        purple)         color="0;35";;
+        cyan)           color="0;36";;
+        lightgray)      color="0;37";;
+        darkgray)       color="1;30";;
+        lightred)       color="1;31";;
+        lightgreen)     color="1;32";;
+        lightyellow)    color="1;33";;
+        lightblue)      color="1;34";;
+        lightpurple)    color="1;35";;
+        lightcyan)      color="1;36";;
+        white)          color="1;37";;
+        reset)          color="0";;
+        help)           color_help && exit 0;;
+        *)              exit 1;;
+    esac
+
+    /bin/echo -ne "\033[${color}m"
+}
+
+if [ "$1" = "list" ]; then
+    print_color black && echo black
+    print_color red && echo red
+    print_color green && echo green
+    print_color yellow && echo yellow
+    print_color blue && echo blue
+    print_color purple && echo purple
+    print_color cyan && echo cyan
+    print_color lightgray && echo lightgray
+    print_color darkgray && echo darkgray
+    print_color lightred && echo lightred
+    print_color lightgreen && echo lightgreen
+    print_color lightyellow && echo lightyellow
+    print_color lightblue && echo lightblue
+    print_color lightpurple && echo lightpurple
+    print_color lightcyan && echo lightcyan
+    print_color white && echo white
+    print_color reset
+    exit 0
+fi
+
+print_color "$1"

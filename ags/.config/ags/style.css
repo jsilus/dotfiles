@@ -1,0 +1,58 @@
+.client-title, .clock {
+  color: #cdd6f4;
+  font-size: 15px;
+  font-family: "Mononoki Nerd Font";
+  background-color: rgba(69, 71, 90, 0.75);
+  border-radius: 8px;
+  margin: 5px 5px 0 5px; }
+
+.workspaces button {
+  all: unset;
+  color: #cdd6f4;
+  background-color: rgba(127, 132, 156, 0.75);
+  border-radius: 8px;
+  min-width: 30px;
+  min-height: 30px;
+  font-size: 20px;
+  margin: 5px 5px 0 5px; }
+  .workspaces button:hover {
+    background-color: #cdd6f4;
+    color: #7f849c; }
+  .workspaces button:active, .workspaces button.active {
+    background-color: #cdd6f4;
+    color: #7f849c; }
+
+.tray button {
+  all: unset;
+  color: #cdd6f4;
+  background-color: rgba(127, 132, 156, 0.75);
+  border-radius: 8px;
+  min-width: 30px;
+  min-height: 30px;
+  font-size: 20px;
+  margin: 5px 5px 0 5px; }
+  .tray button:hover {
+    background-color: #cdd6f4;
+    color: #7f849c; }
+  .tray button:active, .tray button.active {
+    background-color: #cdd6f4;
+    color: #7f849c; }
+
+window#quicksettings .window-content {
+  background-color: rgba(30, 30, 46, 0.75);
+  padding: 0.5em 0.5em 0.5em 0.5em; }
+  window#quicksettings .window-content .brightness-slider {
+    all: unset;
+    padding-right: 1em; }
+    window#quicksettings .window-content .brightness-slider * {
+      all: unset; }
+    window#quicksettings .window-content .brightness-slider trough {
+      background-color: #cba6f7; }
+      window#quicksettings .window-content .brightness-slider trough highlight {
+        min-width: 10em;
+        min-height: 0.1em;
+        background-color: #1e1e2e; }
+    window#quicksettings .window-content .brightness-slider slider {
+      min-width: 1em;
+      min-height: 1em;
+      background-color: #f9e2af; }

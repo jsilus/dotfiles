@@ -1,0 +1,72 @@
+#!/bin/zsh
+
+#
+### TIME #######################################################################
+#
+
+local human_time () {
+	local human total_seconds=$1
+	local days=$(( total_seconds / 60 / 60 / 24 ))
+	local hours=$(( total_seconds / 60 / 60 % 24 ))
+	local minutes=$(( total_seconds / 60 % 60 ))
+	local seconds=$(( total_seconds % 60 ))
+	(( days > 0 )) && human+="${days}d "
+	(( hours > 0 )) && human+="${hours}h "
+	(( minutes > 0 )) && human+="${minutes}m "
+	human+="${seconds}s"
+
+    echo "$human"
+}
+
+local _time_preexec () {
+    _time_recording="true"
+    _time_prevstart=$SECONDS
+}
+add-zsh-hook preexec _time_preexec
+
+local _time_precmd () {
+    if [ "$_time_recording" = "true" ]; then
+        unset -v _time_recording
+        _time_prev=$(( $SECONDS - _time_prevstart ))
+    fi
+}
+add-zsh-hook precmd _time_precmd
+
+local _previous_time () {
+    if [ "$_time_prev" -ge 5 ]; then
+        echo " %F{yellow}$(human_time $_time_prev)%f"
+    else
+        echo ""
+    fi
+}
+
+#
+### GIT ########################################################################
+#
+
+autoload -Uz vcs_info
+add-zsh-hook precmd vcs_info
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:git*' formats '%b%u%c'
+zstyle ':vcs_info:git*' actionformats '%F{yellow}⏱ %*%f'
+zstyle ':vcs_info:git*' unstagedstr '*'
+zstyle ':vcs_info:git*' stagedstr '+'
+
+#
+### BUILDING BLOCKS ############################################################
+#
+
+local directory='%F{cyan}%~%f'
+local newline=$'\n'
+local indicator='%(?.%F{green}.%F{red})%(!.#.$)%f '
+local gitbranch='%F{magenta} ${vcs_info_msg_0_}%f'
+local exectime='$(_previous_time)'
+
+#
+### PROMPT #####################################################################
+#
+
+setopt PROMPT_SUBST
+PROMPT=$newline\
+$directory$gitbranch$exectime$newline\
+$indicator
