@@ -39,7 +39,7 @@ zsh_add_file "zsh-vim-mode"
 zsh_add_file "zsh-fzf"
 zsh_add_file "zsh-keybinds"
 
-
 [[ -o interactive ]] && ascii
 
+eval "$(zoxide init zsh --cmd cd)"
 autopair-init
