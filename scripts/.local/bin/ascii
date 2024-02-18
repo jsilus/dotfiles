@@ -10,10 +10,10 @@ category_enabled () {
 }
 
 random_ascii () {
-    files="$(find $ascii_dir/* -maxdepth 0 -type f 2> /dev/null)"
+    files="$(find -L $ascii_dir/* -maxdepth 0 -type f 2> /dev/null)"
 
     [ -f "$state" ] && while read -r category; do
-        files="$files $(find "$ascii_dir/$category" -type f 2> /dev/null)"
+        files="$files $(find -L "$ascii_dir/$category" -type f 2> /dev/null)"
     done < "$state"
     [ -n "$files" ] && cat "$(shuf -en1 -- $files)" || echo "No categories enabled"
 }
