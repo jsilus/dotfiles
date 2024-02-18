@@ -12,3 +12,5 @@ alias fgrep="fgrep --color=auto"
 alias rm="rm -i"
 alias mv="mv -i"
 alias cp="cp -i"
+
+alias spt="spotify_player"
