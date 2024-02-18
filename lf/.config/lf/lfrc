@@ -94,7 +94,7 @@ on-cd
 # commands
 cmd open &{{
     case $(file --mime-type -Lb $f) in
-        text/*|application/json|application/javascript) lf -remote "send $id \$$EDITOR \$fx";;
+        text/*|application/json|application/javascript|inode/x-empty) lf -remote "send $id \$$EDITOR \$fx";;
         application/zip) lf -remote "send $id %unpack \$fx";;
         *) for f in $fx; do $OPENER $f > /dev/null 2> /dev/null & done;;
     esac

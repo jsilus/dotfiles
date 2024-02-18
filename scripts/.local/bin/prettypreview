@@ -1,6 +1,6 @@
 #!/bin/sh
 
-[ -e "$1" ] || exit 1
+! [ -e "$1" ] && echo "usage: prettypreview <file> <width>" && exit 1
 file="$(realpath "$1")"
 
 if [ -d "$file" ]; then
@@ -15,6 +15,10 @@ case "$mime" in
         unzip -l -- "$file" | awk 'FNR>3 {$1=$2=$3=""; print substr($0,4)}' | tree -C --fromfile
         exit 0
         ;;
+    inode/x-empty)
+        echo -e "\033[7mempty"
+        exit 0
+        ;;
 esac
 
 case "$file" in
@@ -24,4 +28,6 @@ case "$file" in
         ;;
 esac
 
+
+file --mime-encoding "$file" | grep "binary" > /dev/null && echo -e "\033[31mcannot preview: \033[0m$mime" && exit 0
 bat -p --color=always "$file"

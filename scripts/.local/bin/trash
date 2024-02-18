@@ -115,7 +115,7 @@ trash_clear () {
 
 trash_preview () {
     file="$trash_dir/$(trash_get_info $1 2)"
-    ~/.config/fzf/fzf-preview "$file"
+    _fzfpreview "$file"
 }
 
 trash_help () {
