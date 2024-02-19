@@ -1,7 +1,8 @@
 import QuickSettings from './quicksettings/QuickSettings.js';
 import Bar from './bar/Bar.js';
+import { init } from './settings/setup.js';
 import { exec } from 'resource:///com/github/Aylur/ags/utils.js';
-import { compileCss, autoReloadCss } from './settings/scss.js';
+import options from './options.js';
 
 import { forMonitors } from './utils.js';
 
@@ -10,12 +11,10 @@ const windows = () => [
     QuickSettings(),
 ];
 
-compileCss();
-autoReloadCss();
-
 export default {
+    onConfigParsed: init,
     windows: windows().flat(1),
     closeWindowDelay: {
-        quicksettings: 200,
+        quicksettings: options.transition.value,
     },
 };
