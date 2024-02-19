@@ -38,6 +38,7 @@ require("catppuccin").setup({
     integrations = {
         mason = true,
         telescope = true,
+        leap = true,
     },
 })
 

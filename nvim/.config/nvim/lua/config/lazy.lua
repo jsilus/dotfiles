@@ -41,6 +41,7 @@ require("lazy").setup({
     { "numToStr/Comment.nvim", lazy = false, opts = {} },
     { "nvim-tree/nvim-tree.lua", dependencies = { "nvim-tree/nvim-web-devicons" } },
     { "mcauley-penney/tidy.nvim", config = true },
+    { "ggandor/leap.nvim" },
 
 
     -- UI
