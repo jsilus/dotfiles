@@ -2,6 +2,7 @@
 
 alias ls="eza -l --no-quotes --group-directories-first"
 alias la="eza -la --no-quotes --group-directories-first"
+alias cat="bat -p --color=auto"
 alias :q="exit"
 alias bash="HISTFILE=/dev/null bash"
 

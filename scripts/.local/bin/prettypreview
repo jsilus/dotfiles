@@ -19,6 +19,10 @@ case "$mime" in
         echo -e "\033[7mempty"
         exit 0
         ;;
+    application/octet-stream)
+        echo -e "\033[7mbinary data"
+        exit 0
+        ;;
 esac
 
 case "$file" in
