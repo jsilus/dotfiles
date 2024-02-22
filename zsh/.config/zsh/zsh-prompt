@@ -53,6 +53,26 @@ zstyle ':vcs_info:git*' unstagedstr '*'
 zstyle ':vcs_info:git*' stagedstr '+'
 
 #
+### SSH ########################################################################
+#
+
+local _is_ssh () {
+    if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+        echo "%n@%M"
+    else
+        case $(ps -o comm= -p $PPID) in
+            sshd|*/sshd)
+                echo "%n@%M"
+                ;;
+        esac
+    fi
+}
+
+#
+### PACK LINES #################################################################
+#
+
+#
 ### BUILDING BLOCKS ############################################################
 #
 
@@ -61,6 +81,7 @@ local newline=$'\n'
 local indicator='%(?.%F{green}.%F{red})%(!.#.$)%f '
 local gitbranch='%F{magenta} ${vcs_info_msg_0_}%f'
 local exectime='$(_previous_time)'
+local sshhost="%F{black} $(_is_ssh)%f"
 
 #
 ### PROMPT #####################################################################
@@ -68,5 +89,5 @@ local exectime='$(_previous_time)'
 
 setopt PROMPT_SUBST
 PROMPT=$newline\
-$directory$gitbranch$exectime$newline\
+$directory$sshhost$gitbranch$exectime$newline\
 $indicator
