@@ -18,10 +18,10 @@
     @include  unset();
     color: #cdd6f4;
     background-color: transparentize(#7f849c, 0.25);
-    border-radius: 8px;
-    min-width: 30px;
-    min-height: 30px;
-    font-size: 20px;
+    border-radius: 16px;
+    min-width: 2em;
+    min-height: 2em;
+    font-size: 2em;
     margin: 5px 5px 0 5px;
 
     &:focus {

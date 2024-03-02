@@ -9,7 +9,6 @@ const css = `${App.configDir}/style.css`;
 const checkFolder = (folder) => Utils.monitorFile(
     folder,
     reloadScss,
-    'directory',
 );
 
 export const scssWatcher = () => {

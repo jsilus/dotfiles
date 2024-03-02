@@ -51,7 +51,7 @@ ascii_list_categories () {
 }
 
 ascii_toggle_category () {
-    for dir in $(cd "$ascii_dir" && ls -d */ .*/ | cut -f1 -d'/'); do
+    for dir in $(cd "$ascii_dir" && ls -d */ | cut -f1 -d'/'); do
         if [ "$dir" = "$1" ]; then
             visible=enabled
             color=green

@@ -1,6 +1,7 @@
 
 [ -f /usr/share/fzf/key-bindings.zsh ] && source "/usr/share/fzf/key-bindings.zsh"
 [ -f /usr/share/fzf/completion.zsh ] && source "/usr/share/fzf/completion.zsh"
+[ -f /usr/share/fzf/shell/key-bindings.zsh ] && source "/usr/share/fzf/shell/key-bindings.zsh"
 
 export FZF_DEFAULT_OPTS=" \
 --color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
