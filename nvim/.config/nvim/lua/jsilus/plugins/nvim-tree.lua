@@ -7,6 +7,30 @@ return {
         local nvimtree = require("nvim-tree")
 
          nvimtree.setup({
+             view = {
+                width = 35,
+                relativenumber = true,
+             },
+             renderer = {
+                 indent_markers = {
+                     enable = true,
+                 },
+                 icons = {
+                     glyphs = {
+                         folder = {
+                             arrow_closed = "", -- arrow when folder is closed
+                             arrow_open = "", -- arrow when folder is open
+                         },
+                     },
+                 },
+             },
+             actions = {
+                 open_file = {
+                     window_picker = {
+                         enable = false,
+                     },
+                 },
+             },
              disable_netrw = false,
              hijack_netrw = true,
          })
