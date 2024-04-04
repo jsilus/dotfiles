@@ -31,6 +31,7 @@ return {
         key.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "Find files in cwd" })
         key.set("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", { desc = "Find recent files" })
         key.set("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { desc = "Find live grep in cwd" })
+        key.set("n", "<leader>fc", "<cmd>Telescope colorscheme<cr>", { desc = "Find colorscheme" })
         key.set("n", "<leader>ft", "<cmd>TodoTelescope<cr>", { desc = "Find todos" })
     end
 }

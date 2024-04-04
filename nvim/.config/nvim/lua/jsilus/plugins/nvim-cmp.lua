@@ -26,6 +26,16 @@ return {
                     luasnip.lsp_expand(args.body)
                 end,
             },
+            window = {
+                completion = {
+                    border = "single",
+                    winhighlight = "Normal:CmpNormal",
+                },
+                documentation = {
+                    border = "single",
+                    winhighlight = "Normal:CmpNormal"
+                }
+            },
             mapping = cmp.mapping.preset.insert({
                 ["<C-k>"] = cmp.mapping.select_prev_item(),
                 ["<C-j>"] = cmp.mapping.select_next_item(),
