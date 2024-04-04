@@ -10,7 +10,7 @@ return {
         local bufferline = require('bufferline')
         bufferline.setup {
             options = {
-                mode = "buffer",
+                mode = "buffers",
                 themable = true,
                 indicator = {
                     style = 'none',
@@ -85,7 +85,6 @@ return {
             },
         }
 
-        local opts = {noremap = true, silent = true}
         local function map(mode, lhs, rhs, desc)
             vim.keymap.set(mode, lhs, rhs, { noremap = true, silent = true, desc = desc })
         end
