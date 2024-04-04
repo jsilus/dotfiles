@@ -36,12 +36,10 @@ return {
              hijack_netrw = true,
          })
 
-         local key = vim.keymap
-
-         key.set("n", "<leader>ee", "<Cmd>NvimTreeToggle<CR>", { desc = "Toggle file explorer" })
-         key.set("n", "<leader>ef", "<Cmd>NvimTreeFindFileToggle<CR>", { desc = "Toggle file explorer on current file" })
-         key.set("n", "<leader>ec", "<Cmd>NvimTreeCollapse<CR>", { desc = "Collapse file explorer" })
-         key.set("n", "<leader>er", "<Cmd>NvimTreeRefresh<CR>", { desc = "Refresh file explorer" })
+         map("n", "<leader>ee", "<Cmd>NvimTreeToggle<CR>", "Toggle file explorer")
+         map("n", "<leader>ef", "<Cmd>NvimTreeFindFileToggle<CR>", "Toggle file explorer on current file")
+         map("n", "<leader>ec", "<Cmd>NvimTreeCollapse<CR>", "Collapse file explorer")
+         map("n", "<leader>er", "<Cmd>NvimTreeRefresh<CR>", "Refresh file explorer")
 
     end
 }

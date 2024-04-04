@@ -26,12 +26,10 @@ return {
 
         telescope.load_extension("fzf")
 
-        local key = vim.keymap
-
-        key.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "Find files in cwd" })
-        key.set("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", { desc = "Find recent files" })
-        key.set("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { desc = "Find live grep in cwd" })
-        key.set("n", "<leader>fc", "<cmd>Telescope colorscheme<cr>", { desc = "Find colorscheme" })
-        key.set("n", "<leader>ft", "<cmd>TodoTelescope<cr>", { desc = "Find todos" })
+        map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", "Find files in cwd")
+        map("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", "Find recent files")
+        map("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", "Find live grep in cwd")
+        map("n", "<leader>fc", "<cmd>Telescope colorscheme<cr>", "Find colorscheme")
+        map("n", "<leader>ft", "<cmd>TodoTelescope<cr>", "Find todos")
     end
 }

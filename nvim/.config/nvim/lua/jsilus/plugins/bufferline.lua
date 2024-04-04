@@ -85,10 +85,6 @@ return {
             },
         }
 
-        local function map(mode, lhs, rhs, desc)
-            vim.keymap.set(mode, lhs, rhs, { noremap = true, silent = true, desc = desc })
-        end
-
         -- jump to buffer
         map("n", "<leader>b1", "<Cmd>BufferLineGoToBuffer 1<CR>", "Go to buffer 1")
         map("n", "<leader>b2", "<Cmd>BufferLineGoToBuffer 2<CR>", "Go to buffer 2")
