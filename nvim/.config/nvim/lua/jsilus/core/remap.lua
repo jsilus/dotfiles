@@ -25,3 +25,6 @@ map("n", "<C-h>", "<C-w>h", "Move left window")
 map("n", "<C-j>", "<C-w>j", "Move down window")
 map("n", "<C-k>", "<C-w>k", "Move up window")
 map("n", "<C-l>", "<C-w>l", "Move right window")
+
+-- paste to replace without copying what was taken
+map("v", "p", "_dP", "Paste")
