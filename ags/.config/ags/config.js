@@ -3,7 +3,7 @@ import * as Utils from 'resource:///com/github/Aylur/ags/utils.js';
 
 const v = {
     ags: `v${pkg.version}`,
-    expected: 'v1.7.6',
+    expected: 'v1.7.7',
 };
 
 function mismatch() {

@@ -1,4 +1,4 @@
-class Brightness extends Service {
+class BrightnessService extends Service {
     static {
         Service.register(
             this,
@@ -52,6 +52,6 @@ class Brightness extends Service {
     }
 }
 
-const service = new Brightness;
+const service = new BrightnessService;
 
 export default service;

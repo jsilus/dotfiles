@@ -1,4 +1,5 @@
 import * as Button from './buttons/index.js';
+import options from '../options.js';
 
 const Left = (monitor) => Widget.Box({
     children: [
@@ -27,7 +28,7 @@ export default ({ monitor } = { monitor: 0 }) => Widget.Window({
     name: `bar-${monitor}`,
     className: 'bar',
     monitor,
-    anchor: ['top', 'left', 'right'],
+    anchor: options.bar.position.bind('value').transform(pos => [pos, 'left', 'right']),
     exclusivity: 'exclusive',
     child: Widget.CenterBox({
         startWidget: Left(monitor),
