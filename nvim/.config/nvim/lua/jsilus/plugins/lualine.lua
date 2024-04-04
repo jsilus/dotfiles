@@ -42,6 +42,8 @@ return {
             extensions = {
                 'nvim-tree',
                 'mason',
+                'trouble',
+                'lazy',
             },
         })
 
