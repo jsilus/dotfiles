@@ -10,11 +10,14 @@ return {
         local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 
         treesitter.setup({
+            ensure_installed = "lua",
             sync_install = false,
             auto_install = true,
             highlight = {
                 enable = true,
+                disable = { "latex" },
             },
+
         })
 
         vim.filetype.add({
