@@ -86,16 +86,29 @@ return {
         }
 
         local opts = {noremap = true, silent = true}
+        local function map(mode, lhs, rhs, desc)
+            vim.keymap.set(mode, lhs, rhs, { noremap = true, silent = true, desc = desc })
+        end
 
-        vim.keymap.set('n', '<C-1>', '<Cmd>BufferLineGoToBuffer 1<CR>', opts)
-        vim.keymap.set('n', '<C-2>', '<Cmd>BufferLineGoToBuffer 2<CR>', opts)
-        vim.keymap.set('n', '<C-3>', '<Cmd>BufferLineGoToBuffer 3<CR>', opts)
-        vim.keymap.set('n', '<C-4>', '<Cmd>BufferLineGoToBuffer 4<CR>', opts)
-        vim.keymap.set('n', '<C-5>', '<Cmd>BufferLineGoToBuffer 5<CR>', opts)
-        vim.keymap.set('n', '<C-6>', '<Cmd>BufferLineGoToBuffer 6<CR>', opts)
-        vim.keymap.set('n', '<C-7>', '<Cmd>BufferLineGoToBuffer 7<CR>', opts)
-        vim.keymap.set('n', '<C-8>', '<Cmd>BufferLineGoToBuffer 8<CR>', opts)
-        vim.keymap.set('n', '<C-9>', '<Cmd>BufferLineGoToBuffer 9<CR>', opts)
-        vim.keymap.set('n', '<C-10>', '<Cmd>BufferLineGoToBuffer 10<CR>', opts)
+        -- jump to buffer
+        map("n", "<leader>b1", "<Cmd>BufferLineGoToBuffer 1<CR>", "Go to buffer 1")
+        map("n", "<leader>b2", "<Cmd>BufferLineGoToBuffer 2<CR>", "Go to buffer 2")
+        map("n", "<leader>b3", "<Cmd>BufferLineGoToBuffer 3<CR>", "Go to buffer 3")
+        map("n", "<leader>b4", "<Cmd>BufferLineGoToBuffer 4<CR>", "Go to buffer 4")
+        map("n", "<leader>b5", "<Cmd>BufferLineGoToBuffer 5<CR>", "Go to buffer 5")
+        map("n", "<leader>b6", "<Cmd>BufferLineGoToBuffer 6<CR>", "Go to buffer 6")
+        map("n", "<leader>b7", "<Cmd>BufferLineGoToBuffer 7<CR>", "Go to buffer 7")
+        map("n", "<leader>b8", "<Cmd>BufferLineGoToBuffer 8<CR>", "Go to buffer 8")
+        map("n", "<leader>b9", "<Cmd>BufferLineGoToBuffer 9<CR>", "Go to buffer 9")
+        map("n", "<leader>b$", "<Cmd>BufferLineGoToBuffer -1<CR>", "Go to last buffer")
+
+        map("n", "[b", "<Cmd>BufferLineCycleNext<CR>", "Go to next buffer")
+        map("n", "]b", "<Cmd>BufferLineCyclePrev<CR>", "Go to previous buffer")
+        map("n", "<leader>b>", "<Cmd>BufferLineMoveNext<CR>", "Move buffer right")
+        map("n", "<leader>b<", "<Cmd>BufferLineMovePrev<CR>", "Move buffer left")
+
+        -- close current buffer
+        map("n", "<leader>bx", "<Cmd>bd<CR>", "Close active buffer")
+
     end
 }
