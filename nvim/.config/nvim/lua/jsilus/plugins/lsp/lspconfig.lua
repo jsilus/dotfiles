@@ -11,51 +11,39 @@ return {
         local mason_lspconfig = require("mason-lspconfig")
         local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
-        local key = vim.keymap
-
         vim.api.nvim_create_autocmd("LspAttach", {
             group = vim.api.nvim_create_augroup("UserLspConfig", {}),
             callback = function(ev)
-                local opts = { buffer = ev.buf, silent = true }
 
-                opts.desc = "Show LSP rederences"
-                key.set("n", "gR", "<cmd>Telescope lsp_references<CR>", opts)
+                local function map(mode, lhs, rhs, desc)
+                    vim.keymap.set(mode, lhs, rhs, { buffer = ev.buf, silent = true, desc = desc })
+                end
 
-                opts.desc = "Go to declaration"
-                key.set("n", "gD", vim.lsp.buf.declaration, opts)
+                map("n", "gR", "<cmd>Telescope lsp_references<CR>", "Show LSP rederences")
 
-                opts.desc = "Show LSP definitions"
-                key.set("n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts)
+                map("n", "gD", vim.lsp.buf.declaration, "Go to declaration")
 
-                opts.desc = "Show LSP implementations"
-                key.set("n", "gi", "<cmd>Telescope lsp_implementations<CR>", opts)
+                map("n", "gd", "<cmd>Telescope lsp_definitions<CR>", "Show LSP definitions")
 
-                opts.desc = "Show LSP type definitions"
-                key.set("n", "gt", "<cmd>Telescope lsp_type_definitions<CR>", opts)
+                map("n", "gi", "<cmd>Telescope lsp_implementations<CR>", "Show LSP implementations")
 
-                opts.desc = "See available code actions"
-                key.set({"n", "v"}, "<leader>ca", vim.lsp.buf.code_action, opts)
+                map("n", "gt", "<cmd>Telescope lsp_type_definitions<CR>", "Show LSP type definitions")
 
-                opts.desc = "Smart rename"
-                key.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+                map({"n", "v"}, "<leader>ca", vim.lsp.buf.code_action, "See available code actions")
 
-                opts.desc = "Show buffer diagnostics"
-                key.set("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", opts)
+                map("n", "<leader>rn", vim.lsp.buf.rename, "Smart rename")
 
-                opts.desc = "Show line diagnostics"
-                key.set("n", "<leader>d", vim.diagnostic.open_float, opts)
+                map("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", "Show buffer diagnostics")
 
-                opts.desc = "Go to previous diagnostic"
-                key.set("n", "[d", vim.diagnostic.goto_prev, opts)
+                map("n", "<leader>d", vim.diagnostic.open_float, "Show line diagnostics")
 
-                opts.desc = "Go to next diagnostic"
-                key.set("n", "]d", vim.diagnostic.goto_next, opts)
+                map("n", "[d", vim.diagnostic.goto_prev, "Go to previous diagnostic")
 
-                opts.desc = "Show documentation for what is under cursor"
-                key.set("n", "K", vim.lsp.buf.hover, opts)
+                map("n", "]d", vim.diagnostic.goto_next, "Go to next diagnostic")
 
-                opts.desc = "Restart LSP"
-                key.set("n", "<leader>rs", ":LspRestart<CR>", opts)
+                map("n", "K", vim.lsp.buf.hover, "Show documentation for what is under cursor")
+
+                map("n", "<leader>rs", ":LspRestart<CR>", "Restart LSP")
             end,
         })
 
