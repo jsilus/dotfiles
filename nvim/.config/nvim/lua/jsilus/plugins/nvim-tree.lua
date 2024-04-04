@@ -10,6 +10,7 @@ return {
              view = {
                 width = 35,
                 relativenumber = true,
+                number = true,
              },
              renderer = {
                  indent_markers = {

@@ -1,31 +1,31 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-local key = vim.keymap
+local function map(mode, lhs, rhs, desc)
+    vim.keymap.set(mode, lhs, rhs, { desc = desc })
+end
 
 -- file explorer
-key.set("n", "<leader>ex", vim.cmd.Ex, { desc = "Enter Netrw explorer" })
+map("n", "<leader>ex", vim.cmd.Ex, "Enter Netrw explorer")
 
 -- move block of text
-key.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move block of text down" })
-key.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move block of text up" })
-key.set("v", "<", "<gv", { desc = "Deindent block of text" })
-key.set("v", ">", ">gv", { desc = "Indent block of text" })
+map("v", "J", ":m '>+1<CR>gv=gv", "Move block of text down")
+map("v", "K", ":m '<-2<CR>gv=gv", "Move block of text up")
+map("v", "<", "<gv", "Deindent block of text")
+map("v", ">", ">gv", "Indent block of text")
 
 -- increment/decrement numbers
-key.set("n", "<leader>+", "<C-a>", { desc = "Increment a number" })
-key.set("n", "<leader>-", "<C-x>", { desc = "Decrement a number" })
+map("n", "<leader>+", "<C-a>", "Increment a number")
+map("n", "<leader>-", "<C-x>", "Decrement a number")
 
 -- create and manage windows
-key.set("n", "<leader>sv", "<C-w>v", { desc = "Split window vertically" })
-key.set("n", "<leader>sh", "<C-w>s", { desc = "Split window horizontally" })
-key.set("n", "<leader>sr", "<C-w>=", { desc = "Reset window sizes" })
-key.set("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close window" })
+map("n", "<leader>sv", "<C-w>v", "Split window vertically")
+map("n", "<leader>sh", "<C-w>s", "Split window horizontally")
+map("n", "<leader>sr", "<C-w>=", "Reset window sizes")
+map("n", "<leader>sx", "<cmd>close<CR>", "Close window")
 
 -- move between windows
-key.set({ "n", "i" }, "<C-h>", "<C-w>h")
-key.set({ "n", "i" }, "<C-j>", "<C-w>j")
-key.set({ "n", "i" }, "<C-k>", "<C-w>k")
-key.set({ "n", "i" }, "<C-l>", "<C-w>l")
-
-key.set("n", "J", "mzJ`z")
+map("n", "<C-h>", "<C-w>h", "Move left window")
+map("n", "<C-j>", "<C-w>j", "Move down window")
+map("n", "<C-k>", "<C-w>k", "Move up window")
+map("n", "<C-l>", "<C-w>l", "Move right window")
