@@ -7,8 +7,9 @@ local sn = ls.snippet_node
 local t = ls.text_node
 local i = ls.insert_node
 local f = ls.function_node
+local c = ls.choice_node
 local d = ls.dynamic_node
-local fmt = require("luasnip.extras.fmt").fmt
+local r = ls.restore_node
 local fmta = require("luasnip.extras.fmt").fmta
 local rep = require("luasnip.extras").rep
 
@@ -57,14 +58,14 @@ local function snippet(trigger, desc, replacement, opts, cond)
     -- parse opts
     opts = opts or ""
     cond = cond or {}
-    opts:gsub(".", function(c)
-        if c == "m" then
+    opts:gsub(".", function(ch)
+        if ch == "m" then
             cond.condition = tex.in_mathzone
             cond.show_condition = tex.in_mathzone
-        elseif c == "t" then
+        elseif ch == "t" then
             cond.condition = tex.in_text
             cond.show_condition = tex.in_text
-        elseif c == "r" then
+        elseif ch == "r" then
             trigger.trigEngine = "ecma"
         end
     end)
@@ -93,6 +94,25 @@ local function get_visual(_, parent)
     else
         return sn(nil, i(1))
     end
+end
+
+local function mat(_, snip)
+	local rows = tonumber(snip.captures[2])
+    local cols = tonumber(snip.captures[3])
+	local nodes = {}
+	local ins_indx = 1
+	for j = 1, rows do
+        table.insert(nodes, t({"", ""}))
+		table.insert(nodes, r(ins_indx, tostring(j) .. "x1", i(1)))
+		ins_indx = ins_indx + 1
+		for k = 2, cols do
+			table.insert(nodes, t(" & "))
+			table.insert(nodes, r(ins_indx, tostring(j) .. "x" .. tostring(k), i(1)))
+			ins_indx = ins_indx + 1
+		end
+		table.insert(nodes, t("\\\\"))
+	end
+	return sn(nil, nodes)
 end
 
 --------------
@@ -164,46 +184,24 @@ return {
         ]],
         i(1), i(2), rep(1)
     }, "m"),
-    autosnippet("pmat", "Parenthesis Matrix", {
+    autosnippet("([bBpvV])mat(\\d+)x(\\d+)([ar])", "Matrix", {
         [[
-        \begin{pmatrix}
-            <>
-        \end{pmatrix}
+        \begin{<><>}<><>
+        \end{<><>}
         ]],
-        i(1)
-    }, "m"),
-    autosnippet("bmat", "Brace Matrix", {
-        [[
-        \begin{bmatrix}
-            <>
-        \end{bmatrix}
-        ]],
-        i(1)
-    }, "m"),
-    autosnippet("Bmat", "Brace Matrix", {
-        [[
-        \begin{Bmatrix}
-            <>
-        \end{Bmatrix}
-        ]],
-        i(1)
-    }, "m"),
-    autosnippet("vmat", "Vector Matrix", {
-        [[
-        \begin{vmatrix}
-            <>
-        \end{vmatrix}
-        ]],
-        i(1)
-    }, "m"),
-    autosnippet("Vmat", "Vector Matrix", {
-        [[
-        \begin{Vmatrix}
-            <>
-        \end{Vmatrix}
-        ]],
-        i(1)
-    }, "m"),
+        capture(1),
+        t("matrix"),
+        f(function(_, snip)
+            if snip.captures[4] == "a" then
+                local out = string.rep("c", tonumber(snip.captures[3]) - 1)
+                return "[" .. out .. "|c]"
+            end
+            return ""
+        end),
+        d(1, mat),
+        capture(1),
+        t("matrix"),
+    }, "mr"),
     autosnippet("case", "Case Block", {
         [[
         \begin{case}
