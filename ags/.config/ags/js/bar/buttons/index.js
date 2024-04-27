@@ -1,7 +1,0 @@
-export {default as Battery} from './Battery.js'
-export {default as Clock} from './Clock.js'
-export {default as FocusedClient} from './FocusedClient.js'
-export {default as Notification} from './Notification.js'
-export {default as QuickSettingsToggle} from './QuickSettingsToggle.js'
-export {default as SysTray} from './SysTray.js'
-export {default as Workspaces} from './Workspaces.js'
