@@ -3,11 +3,15 @@
 COMPLETED_DIR="$HOME/Downloads/"
 DOWNLOADING_DIR="$HOME/Downloads/.downloading/"
 
-# TODO: notify
-
 mv "$3" "$COMPLETED_DIR/$(basename "$3")"
 
 COUNT="$(ls -1 "$DOWNLOADING_DIR" | wc -l)"
 if [ "$COUNT" -eq 0 ]; then
     rm -r "$DOWNLOADING_DIR"
+fi
+
+ACTION="$(notify-send "Download Complete" "$(basename "$3")" -A "open=Open Downloads Folder")"
+
+if [ "$ACTION" = "open" ]; then
+    kitty lf ~/Downloads
 fi
