@@ -7,6 +7,7 @@ import { DND } from "./widgets/DND"
 import { DarkModeToggle } from "./widgets/DarkMode"
 import { MicMute } from "./widgets/MicMute"
 import { Media } from "./widgets/Media"
+import { Brightness } from "./widgets/Brightness"
 import PopupWindow from "widget/PopupWindow"
 import options from "options"
 
@@ -46,6 +47,7 @@ const Settings = () => Widget.Box({
                     [SinkSelector, AppMixer],
                 ),
                 Microhone(),
+                Brightness(),
             ],
         }),
         Row(
