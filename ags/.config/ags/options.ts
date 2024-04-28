@@ -14,39 +14,39 @@ const options = mkOptions(OPTIONS, {
     theme: {
         dark: {
             primary: {
-                bg: opt("#51a4e7"),
-                fg: opt("#141414"),
+                bg: opt("#74c7ec"),
+                fg: opt("#313244"),
             },
             error: {
-                bg: opt("#e55f86"),
-                fg: opt("#141414"),
+                bg: opt("#f38ba8"),
+                fg: opt("#313244"),
             },
-            bg: opt("#171717"),
-            fg: opt("#eeeeee"),
-            widget: opt("#eeeeee"),
-            border: opt("#eeeeee"),
+            bg: opt("#313244"),
+            fg: opt("#cdd6f4"),
+            widget: opt("#9399b2"),
+            border: opt("#bac2de"),
         },
         light: {
             primary: {
-                bg: opt("#426ede"),
-                fg: opt("#eeeeee"),
+                bg: opt("#209fb5"),
+                fg: opt("#cdd0da"),
             },
             error: {
-                bg: opt("#b13558"),
-                fg: opt("#eeeeee"),
+                bg: opt("#d20f39"),
+                fg: opt("#cdd0da"),
             },
-            bg: opt("#fffffa"),
-            fg: opt("#080808"),
-            widget: opt("#080808"),
-            border: opt("#080808"),
+            bg: opt("#cdd0da"),
+            fg: opt("#4c4f69"),
+            widget: opt("#7c7f93"),
+            border: opt("#5c5f77"),
         },
 
         blur: opt(0),
         scheme: opt<"dark" | "light">("dark"),
-        widget: { opacity: opt(94) },
+        widget: { opacity: opt(90) },
         border: {
             width: opt(1),
-            opacity: opt(96),
+            opacity: opt(89),
         },
 
         shadows: opt(true),
@@ -58,14 +58,14 @@ const options = mkOptions(OPTIONS, {
     transition: opt(200),
 
     font: {
-        size: opt(13),
-        name: opt("Ubuntu Nerd Font"),
+        size: opt(12),
+        name: opt("Mononoki Nerd Font"),
     },
 
     bar: {
-        flatButtons: opt(true),
+        flatButtons: opt(false),
         position: opt<"top" | "bottom">("top"),
-        corners: opt(true),
+        corners: opt(false),
         layout: {
             start: opt<Array<import("widget/bar/Bar").BarWidget>>([
                 "launcher",
@@ -95,29 +95,29 @@ const options = mkOptions(OPTIONS, {
             },
             label: {
                 colored: opt(false),
-                label: opt(" Applications"),
+                label: opt(""),
             },
             action: opt(() => App.toggleWindow("launcher")),
         },
         date: {
-            format: opt("%H:%M - %A %e."),
+            format: opt("%I:%M %p - %A %e"),
             action: opt(() => App.toggleWindow("datemenu")),
         },
         battery: {
-            bar: opt<"hidden" | "regular" | "whole">("regular"),
-            charging: opt("#00D787"),
+            bar: opt<"hidden" | "regular" | "whole">("whole"),
+            charging: opt("#a6e3a1"),
             percentage: opt(true),
             blocks: opt(7),
             width: opt(50),
             low: opt(30),
         },
         workspaces: {
-            workspaces: opt(7),
+            workspaces: opt(9),
         },
         taskbar: {
             iconSize: opt(0),
-            monochrome: opt(true),
-            exclusive: opt(false),
+            monochrome: opt(false),
+            exclusive: opt(true),
         },
         messages: {
             action: opt(() => App.toggleWindow("datemenu")),
@@ -149,12 +149,13 @@ const options = mkOptions(OPTIONS, {
         },
         apps: {
             iconSize: opt(62),
-            max: opt(6),
+            max: opt(10),
             favorites: opt([
                 [
                     "firefox",
                     "thunderbird",
                     "steam",
+                    "obsidian",
                     "discord",
                 ],
             ]),
@@ -163,8 +164,8 @@ const options = mkOptions(OPTIONS, {
 
     overview: {
         scale: opt(9),
-        workspaces: opt(7),
-        monochromeIcon: opt(true),
+        workspaces: opt(9),
+        monochromeIcon: opt(false),
     },
 
     powermenu: {
@@ -229,7 +230,7 @@ const options = mkOptions(OPTIONS, {
     hyprland: {
         gaps: opt(2.4),
         inactiveBorder: opt("333333ff"),
-        gapsWhenOnly: opt(false),
+        gapsWhenOnly: opt(true),
     },
 })
 
