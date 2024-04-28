@@ -4,20 +4,18 @@ const { messageAsync } = await Service.import("hyprland")
 const {
     hyprland,
     theme: {
+        themes,
         spacing,
         radius,
         border: { width },
         blur,
         shadows,
-        dark: {
-            primary: { bg: darkActive },
-        },
-        light: {
-            primary: { bg: lightActive },
-        },
         scheme,
     },
 } = options
+
+const darkActive = themes[themes.active].dark.primary.bg
+const lightActive = themes[themes.active].light.primary.bg
 
 const deps = [
     "hyprland",

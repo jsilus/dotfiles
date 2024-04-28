@@ -13,8 +13,7 @@ const deps = [
 ]
 
 const {
-    dark,
-    light,
+    themes,
     blur,
     scheme,
     padding,
@@ -24,6 +23,11 @@ const {
     widget,
     border,
 } = options.theme
+
+const {
+    light,
+    dark,
+} = themes[themes.active]
 
 const popoverPaddingMultiplier = 1.6
 
@@ -73,7 +77,7 @@ const variables = () => [
     $("font-name", options.font.name),
 
     // etc
-    $("charging-bg", options.bar.battery.charging),
+    $("charging-bg", t(dark.battery.charging, light.battery.charging)),
     $("bar-battery-blocks", options.bar.battery.blocks),
     $("bar-position", options.bar.position),
     $("hyprland-gaps-multiplier", options.hyprland.gaps),

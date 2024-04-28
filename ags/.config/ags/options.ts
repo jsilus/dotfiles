@@ -12,33 +12,44 @@ const options = mkOptions(OPTIONS, {
     },
 
     theme: {
-        dark: {
-            primary: {
-                bg: opt("#74c7ec"),
-                fg: opt("#313244"),
+        themes: {
+            active: opt<"catppuccin">("catppuccin"),
+            catppuccin: {
+                dark: {
+                    primary: {
+                        bg: opt("#74c7ec"),
+                        fg: opt("#313244"),
+                    },
+                    error: {
+                        bg: opt("#f38ba8"),
+                        fg: opt("#313244"),
+                    },
+                    bg: opt("#313244"),
+                    fg: opt("#cdd6f4"),
+                    widget: opt("#9399b2"),
+                    border: opt("#bac2de"),
+                    battery: {
+                        charging: opt("#a6e3a1"),
+                    },
+                },
+                light: {
+                    primary: {
+                        bg: opt("#209fb5"),
+                        fg: opt("#cdd0da"),
+                    },
+                    error: {
+                        bg: opt("#d20f39"),
+                        fg: opt("#cdd0da"),
+                    },
+                    bg: opt("#cdd0da"),
+                    fg: opt("#4c4f69"),
+                    widget: opt("#7c7f93"),
+                    border: opt("#5c5f77"),
+                    battery: {
+                        charging: opt("#40a02b"),
+                    },
+                },
             },
-            error: {
-                bg: opt("#f38ba8"),
-                fg: opt("#313244"),
-            },
-            bg: opt("#313244"),
-            fg: opt("#cdd6f4"),
-            widget: opt("#9399b2"),
-            border: opt("#bac2de"),
-        },
-        light: {
-            primary: {
-                bg: opt("#209fb5"),
-                fg: opt("#cdd0da"),
-            },
-            error: {
-                bg: opt("#d20f39"),
-                fg: opt("#cdd0da"),
-            },
-            bg: opt("#cdd0da"),
-            fg: opt("#4c4f69"),
-            widget: opt("#7c7f93"),
-            border: opt("#5c5f77"),
         },
 
         blur: opt(0),
@@ -105,7 +116,6 @@ const options = mkOptions(OPTIONS, {
         },
         battery: {
             bar: opt<"hidden" | "regular" | "whole">("whole"),
-            charging: opt("#a6e3a1"),
             percentage: opt(true),
             blocks: opt(7),
             width: opt(50),
@@ -184,7 +194,7 @@ const options = mkOptions(OPTIONS, {
         },
         width: opt(380),
         position: opt<"left" | "center" | "right">("right"),
-        networkSettings: opt("gtk-launch gnome-control-center"),
+        networkSettings: opt("nm-connection-editor"),
         media: {
             monochromeIcon: opt(true),
             coverSize: opt(100),
