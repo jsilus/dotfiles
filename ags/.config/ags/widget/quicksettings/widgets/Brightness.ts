@@ -10,6 +10,7 @@ const BrightnessSlider = () => Widget.Slider({
 
 export const Brightness = () => Widget.Box({
     class_name: "brightness",
+    visible: brightness.bind("available"),
     children: [
         Widget.Button({
             vpack: "center",

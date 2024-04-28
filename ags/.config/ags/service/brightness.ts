@@ -1,37 +1,22 @@
 import { bash, dependencies, sh } from "lib/utils"
 
-if (!dependencies("brightnessctl"))
-    App.quit()
-
 const get = (args: string) => Number(Utils.exec(`brightnessctl ${args}`))
 const screen = await bash`ls -w1 /sys/class/backlight | head -1`
-const kbd = await bash`ls -w1 /sys/class/leds | head -1`
 
 class Brightness extends Service {
     static {
         Service.register(this, {}, {
             "screen": ["float", "rw"],
-            "kbd": ["int", "rw"],
+            "available": ["bool", "r"],
         })
     }
 
-    #kbdMax = get(`--device ${kbd} max`)
-    #kbd = get(`--device ${kbd} get`)
-    #screenMax = get("max")
-    #screen = get("get") / get("max")
+    #available = dependencies("brightnessctl")
+    #screenMax = 1
+    #screen = 1
 
-    get kbd() { return this.#kbd }
     get screen() { return this.#screen }
-
-    set kbd(value) {
-        if (value < 0 || value > this.#kbdMax)
-            return
-
-        sh(`brightnessctl -d ${kbd} s ${value} -q`).then(() => {
-            this.#kbd = value
-            this.changed("kbd")
-        })
-    }
+    get available() { return this.#available }
 
     set screen(percent) {
         if (percent < 0)
@@ -50,19 +35,18 @@ class Brightness extends Service {
         super()
 
         const screenPath = `/sys/class/backlight/${screen}/brightness`
-        const kbdPath = `/sys/class/leds/${kbd}/brightness`
 
-        Utils.monitorFile(screenPath, async f => {
-            const v = await Utils.readFileAsync(f)
-            this.#screen = Number(v) / this.#screenMax
-            this.changed("screen")
-        })
-
-        Utils.monitorFile(kbdPath, async f => {
-            const v = await Utils.readFileAsync(f)
-            this.#kbd = Number(v) / this.#kbdMax
-            this.changed("kbd")
-        })
+        if (this.#available) {
+            Utils.monitorFile(screenPath, async f => {
+                const v = await Utils.readFileAsync(f)
+                this.#screen = Number(v) / this.#screenMax
+                this.changed("screen")
+            })
+            this.#screenMax = get("max")
+            this.#screen = get("get") / get("max")
+        } else {
+            console.warn("not using brightness slider")
+        }
     }
 }
 
