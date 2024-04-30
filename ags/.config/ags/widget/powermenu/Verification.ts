@@ -38,7 +38,10 @@ export default () => PopupWindow({
                     }),
                     Widget.Button({
                         child: Widget.Label("Yes"),
-                        on_clicked: () => Utils.exec(powermenu.cmd),
+                        on_clicked: () => {
+                            App.closeWindow("verification")
+                            Utils.exec(powermenu.cmd)
+                        },
                     }),
                 ],
             }),

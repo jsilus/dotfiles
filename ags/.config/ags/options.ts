@@ -256,7 +256,7 @@ const options = mkOptions(OPTIONS, {
             monochrome: opt(true),
             preferred: opt("spotify"),
             direction: opt<"left" | "right">("right"),
-            format: opt("{artists} - {title}"),
+            format: opt("{title} - {artists}"),
             length: opt(40),
         },
         powermenu: {
@@ -297,6 +297,7 @@ const options = mkOptions(OPTIONS, {
         reboot: opt("systemctl reboot"),
         logout: opt("pkill Hyprland"),
         shutdown: opt("shutdown now"),
+        lock: opt("hyprlock"),
         layout: opt<"line" | "box">("line"),
         labels: opt(true),
     },

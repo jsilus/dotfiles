@@ -1,5 +1,5 @@
 import options from "options"
-import { sh } from "lib/utils"
+import { zsh, sh } from "lib/utils"
 
 const kitty = {
     catppuccin: {
@@ -20,12 +20,19 @@ const kitty = {
     },
 }
 
+const fast_zsh_syntax_highlighting = {
+    catppuccin: {
+        light: "catppuccin-latte",
+        dark: "catppuccin-mocha",
+    },
+}
+
 function theme() {
     const theme = options.theme.active.value
     const scheme = options.theme.scheme.value
 
-    // set kitty theme
     sh(`kitty kitten themes --reload-in=all ${kitty[theme][scheme]}`)
+    zsh(`source \$XDG_CONFIG_HOME/zsh/.zshrc && fast-theme XDG:${fast_zsh_syntax_highlighting[theme][scheme]}`)
 }
 
 export default function init() {
