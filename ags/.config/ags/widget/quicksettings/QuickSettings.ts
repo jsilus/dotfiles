@@ -8,6 +8,7 @@ import { DarkModeToggle } from "./widgets/DarkMode"
 import { MicMute } from "./widgets/MicMute"
 import { Media } from "./widgets/Media"
 import { Brightness } from "./widgets/Brightness"
+import { ThemeToggle, ThemeSelection } from "./widgets/Theme"
 import PopupWindow from "widget/PopupWindow"
 import options from "options"
 
@@ -55,7 +56,8 @@ const Settings = () => Widget.Box({
             [WifiSelection, BluetoothDevices],
         ),
         Row(
-            [DarkModeToggle],
+            [DarkModeToggle, ThemeToggle],
+            [ThemeSelection],
         ),
         Row([MicMute, DND]),
         Widget.Box({

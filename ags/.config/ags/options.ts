@@ -13,8 +13,9 @@ const options = mkOptions(OPTIONS, {
 
     theme: {
         themes: {
-            active: opt<"catppuccin">("catppuccin"),
             catppuccin: {
+                display: opt("Catppuccin"),
+                icon: opt("󰄛 "),
                 dark: {
                     primary: {
                         bg: opt("#74c7ec"),
@@ -50,9 +51,48 @@ const options = mkOptions(OPTIONS, {
                     },
                 },
             },
+            gruvbox: {
+                display: opt("Gruvbox"),
+                icon: opt(" "),
+                dark: {
+                    primary: {
+                        bg: opt("#458588"),
+                        fg: opt("#ebdbb2"),
+                    },
+                    error: {
+                        bg: opt("#cc241d"),
+                        fg: opt("#ebdbb2"),
+                    },
+                    bg: opt("#282828"),
+                    fg: opt("#ebdbb2"),
+                    widget: opt("#504945"),
+                    border: opt("#d5c4a1"),
+                    battery: {
+                        charging: opt("#b8bb26"),
+                    },
+                },
+                light: {
+                    primary: {
+                        bg: opt("#458588"),
+                        fg: opt("#3c3836"),
+                    },
+                    error: {
+                        bg: opt("#cc241d"),
+                        fg: opt("#3c3836"),
+                    },
+                    bg: opt("#fbf1c7"),
+                    fg: opt("#3c3836"),
+                    widget: opt("#d5c4a1"),
+                    border: opt("#504945"),
+                    battery: {
+                        charging: opt("#98971a"),
+                    },
+                },
+            },
         },
 
         blur: opt(0),
+        active: opt<"catppuccin" | "gruvbox">("catppuccin"),
         scheme: opt<"dark" | "light">("dark"),
         widget: { opacity: opt(90) },
         border: {
@@ -94,7 +134,7 @@ const options = mkOptions(OPTIONS, {
                 "systray",
                 "colorpicker",
                 "screenrecord",
-                "battery",
+                // "battery",
                 "system",
                 "powermenu",
             ]),
@@ -233,7 +273,7 @@ const options = mkOptions(OPTIONS, {
 
     notifications: {
         position: opt<Array<"top" | "bottom" | "left" | "right">>(["top", "right"]),
-        blacklist: opt(["Spotify"]),
+        blacklist: opt(["spotify_player"]),
         width: opt(440),
     },
 

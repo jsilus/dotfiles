@@ -43,6 +43,7 @@ type ArrowToggleButtonProps = {
     activate: () => void
     deactivate: () => void
     activateOnArrow?: boolean
+    stringIcon?: boolean
     connection: [GObject.Object, () => boolean]
 }
 export const ArrowToggleButton = ({
@@ -52,6 +53,7 @@ export const ArrowToggleButton = ({
     activate,
     deactivate,
     activateOnArrow = true,
+    stringIcon = false,
     connection: [service, condition],
 }: ArrowToggleButtonProps) => Widget.Box({
     class_name: "toggle-button",
@@ -63,6 +65,11 @@ export const ArrowToggleButton = ({
             child: Widget.Box({
                 hexpand: true,
                 children: [
+                    stringIcon ?
+                    Widget.Label({
+                        class_name: "icon",
+                        label: icon,
+                    }) :
                     Widget.Icon({
                         class_name: "icon",
                         icon,

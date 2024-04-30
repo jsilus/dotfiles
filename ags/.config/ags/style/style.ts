@@ -15,6 +15,7 @@ const deps = [
 const {
     themes,
     blur,
+    active,
     scheme,
     padding,
     spacing,
@@ -23,11 +24,6 @@ const {
     widget,
     border,
 } = options.theme
-
-const {
-    light,
-    dark,
-} = themes[themes.active]
 
 const popoverPaddingMultiplier = 1.6
 
@@ -38,15 +34,15 @@ const t = (dark: Opt<any> | string, light: Opt<any> | string) => scheme.value ==
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const $ = (name: string, value: string | Opt<any>) => `$${name}: ${value};`
 
-const variables = () => [
-    $("bg", blur.value ? `transparentize(${t(dark.bg, light.bg)}, ${blur.value / 100})` : t(dark.bg, light.bg)),
-    $("fg", t(dark.fg, light.fg)),
+const variables = (active) => [
+    $("bg", blur.value ? `transparentize(${active.bg}, ${blur.value / 100})` : active.bg),
+    $("fg", active.fg),
 
-    $("primary-bg", t(dark.primary.bg, light.primary.bg)),
-    $("primary-fg", t(dark.primary.fg, light.primary.fg)),
+    $("primary-bg", active.primary.bg),
+    $("primary-fg", active.primary.fg),
 
-    $("error-bg", t(dark.error.bg, light.error.bg)),
-    $("error-fg", t(dark.error.fg, light.error.fg)),
+    $("error-bg", active.error.bg),
+    $("error-fg", active.error.fg),
 
     $("scheme", scheme),
     $("padding", `${padding}pt`),
@@ -56,20 +52,20 @@ const variables = () => [
 
     $("shadows", `${shadows}`),
 
-    $("widget-bg", `transparentize(${t(dark.widget, light.widget)}, ${widget.opacity.value / 100})`),
+    $("widget-bg", `transparentize(${active.widget}, ${widget.opacity.value / 100})`),
 
-    $("hover-bg", `transparentize(${t(dark.widget, light.widget)}, ${(widget.opacity.value * .9) / 100})`),
-    $("hover-fg", `lighten(${t(dark.fg, light.fg)}, 8%)`),
+    $("hover-bg", `transparentize(${active.widget}, ${(widget.opacity.value * .9) / 100})`),
+    $("hover-fg", `lighten(${active.fg}, 8%)`),
 
     $("border-width", `${border.width}px`),
-    $("border-color", `transparentize(${t(dark.border, light.border)}, ${border.opacity.value / 100})`),
+    $("border-color", `transparentize(${active.border}, ${border.opacity.value / 100})`),
     $("border", "$border-width solid $border-color"),
 
-    $("active-gradient", `linear-gradient(to right, ${t(dark.primary.bg, light.primary.bg)}, darken(${t(dark.primary.bg, light.primary.bg)}, 4%))`),
+    $("active-gradient", `linear-gradient(to right, ${active.primary.bg}, darken(${active.primary.bg}, 4%))`),
     $("shadow-color", t("rgba(0,0,0,.6)", "rgba(0,0,0,.4)")),
     $("text-shadow", t("2pt 2pt 2pt $shadow-color", "none")),
 
-    $("popover-border-color", `transparentize(${t(dark.border, light.border)}, ${Math.max(((border.opacity.value - 1) / 100), 0)})`),
+    $("popover-border-color", `transparentize(${active.border}, ${Math.max(((border.opacity.value - 1) / 100), 0)})`),
     $("popover-padding", `$padding * ${popoverPaddingMultiplier}`),
     $("popover-radius", radius.value === 0 ? "0" : "$radius + $popover-padding"),
 
@@ -77,7 +73,7 @@ const variables = () => [
     $("font-name", options.font.name),
 
     // etc
-    $("charging-bg", t(dark.battery.charging, light.battery.charging)),
+    $("charging-bg", active.battery.charging),
     $("bar-battery-blocks", options.bar.battery.blocks),
     $("bar-position", options.bar.position),
     $("hyprland-gaps-multiplier", options.hyprland.gaps),
@@ -89,7 +85,7 @@ async function resetCss() {
 
     try {
         const vars = `${TMP}/variables.scss`
-        await Utils.writeFile(variables().join("\n"), vars)
+        await Utils.writeFile(variables(themes[active][scheme]).join("\n"), vars)
 
         const fd = await sh(`fd ".scss" ${App.configDir}`)
         const files = fd.split(/\s+/).map(f => `@import '${f}';`)

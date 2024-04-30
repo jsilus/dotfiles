@@ -1,4 +1,4 @@
-import BatteryBar from "./buttons/BatteryBar"
+// import BatteryBar from "./buttons/BatteryBar"
 import ColorPicker from "./buttons/ColorPicker"
 import Date from "./buttons/Date"
 import Launcher from "./buttons/Launcher"
@@ -18,7 +18,7 @@ const pos = options.bar.position.bind()
 export type BarWidget = keyof typeof widget
 
 const widget = {
-    battery: BatteryBar,
+    // battery: BatteryBar,
     colorpicker: ColorPicker,
     date: Date,
     launcher: Launcher,

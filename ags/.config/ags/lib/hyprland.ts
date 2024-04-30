@@ -10,12 +10,13 @@ const {
         border: { width },
         blur,
         shadows,
+        active,
         scheme,
     },
 } = options
 
-const darkActive = themes[themes.active].dark.primary.bg
-const lightActive = themes[themes.active].light.primary.bg
+const darkActive = themes[active].dark.primary.bg
+const lightActive = themes[active].light.primary.bg
 
 const deps = [
     "hyprland",
