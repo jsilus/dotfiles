@@ -87,10 +87,48 @@ const options = mkOptions(OPTIONS, {
                     },
                 },
             },
+            kanagawa: {
+                display: opt("Kanagawa"),
+                icon: opt("󱪁 "),
+                dark: {
+                    primary: {
+                        bg: opt("#6a9589"),
+                        fg: opt("#1f1f28"),
+                    },
+                    error: {
+                        bg: opt("#c34043"),
+                        fg: opt("#1f1f28"),
+                    },
+                    bg: opt("#1f1f28"),
+                    fg: opt("#dcd7ba"),
+                    widget: opt("#9cabca"),
+                    border: opt("#dcd7ba"),
+                    battery: {
+                        charging: opt("#76946a"),
+                    },
+                },
+                light: {
+                    primary: {
+                        bg: opt("#597b75"),
+                        fg: opt("#f2ecbc"),
+                    },
+                    error: {
+                        bg: opt("#c84053"),
+                        fg: opt("#f2ecbc"),
+                    },
+                    bg: opt("#f2ecbc"),
+                    fg: opt("#545464"),
+                    widget: opt("#2a2a37"),
+                    border: opt("#545464"),
+                    battery: {
+                        charging: opt("#6f894e"),
+                    },
+                },
+            },
         },
 
         blur: opt(0),
-        active: opt<"catppuccin" | "gruvbox">("catppuccin"),
+        active: opt<"catppuccin" | "gruvbox" | "kanagawa">("catppuccin"),
         scheme: opt<"dark" | "light">("dark"),
         widget: { opacity: opt(90) },
         border: {

@@ -10,6 +10,10 @@ const kitty = {
         light: "Gruvbox Light",
         dark: "Gruvbox Dark",
     },
+    kanagawa: {
+        light: "Kanagawa_light",
+        dark: "Kanagawa",
+    },
 }
 
 function theme() {
