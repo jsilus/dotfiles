@@ -14,6 +14,10 @@ const kitty = {
         light: "Kanagawa_light",
         dark: "Kanagawa",
     },
+    nord: {
+        light: "Nord",
+        dark: "Nord",
+    },
 }
 
 function theme() {

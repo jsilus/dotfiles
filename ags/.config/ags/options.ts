@@ -125,10 +125,48 @@ const options = mkOptions(OPTIONS, {
                     },
                 },
             },
+            nord: {
+                display: opt("Nord"),
+                icon: opt(" "),
+                dark: {
+                    primary: {
+                        bg: opt("#8fbcbb"),
+                        fg: opt("#2e3440"),
+                    },
+                    error: {
+                        bg: opt("#bf616a"),
+                        fg: opt("#2e3440"),
+                    },
+                    bg: opt("#2e3440"),
+                    fg: opt("#d8dee9"),
+                    widget: opt("#4c566a"),
+                    border: opt("#d8dee9"),
+                    battery: {
+                        charging: opt("#a3be8c"),
+                    },
+                },
+                light: {
+                    primary: {
+                        bg: opt("#88c0d0"),
+                        fg: opt("#2e3440"),
+                    },
+                    error: {
+                        bg: opt("#bf616a"),
+                        fg: opt("#2e3440"),
+                    },
+                    bg: opt("#d8dee9"),
+                    fg: opt("#2e3440"),
+                    widget: opt("#4c566a"),
+                    border: opt("#2e3440"),
+                    battery: {
+                        charging: opt("#a3be8c"),
+                    },
+                },
+            },
         },
 
         blur: opt(0),
-        active: opt<"catppuccin" | "gruvbox" | "kanagawa">("catppuccin"),
+        active: opt<"catppuccin" | "gruvbox" | "kanagawa" | "nord">("catppuccin"),
         scheme: opt<"dark" | "light">("dark"),
         widget: { opacity: opt(90) },
         border: {

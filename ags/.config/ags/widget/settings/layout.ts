@@ -90,7 +90,7 @@ export default [
         Group("",
             Wallpaper() as ReturnType<typeof Row>,
             Row({ opt: scheme, title: "Color Scheme", type: "enum", enums: ["dark", "light"] }),
-            Row({ opt: active, title: "Theme", type: "enum", enums: ["catppuccin", "gruvbox", "kanagawa"] }),
+            Row({ opt: active, title: "Theme", type: "enum", enums: ["catppuccin", "gruvbox", "kanagawa", "nord"] }),
         ),
         Group("Theme",
             Row({ opt: shadows, title: "Shadows" }),
