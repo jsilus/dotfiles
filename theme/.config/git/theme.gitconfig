@@ -1,0 +1,5 @@
+[include]
+    path = themes/catppuccin-dark.gitconfig
+
+[delta]
+    features = catppuccin-dark

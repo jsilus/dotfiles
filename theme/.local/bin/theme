@@ -1,0 +1,100 @@
+#!/bin/sh
+
+CONFIG="$XDG_CONFIG_HOME/theme/config"
+
+help () {
+    echo "theme: Changes config files to match a theme"
+    echo "  Usage: theme <theme> <scheme>"
+    echo "  Options:"
+    echo "    -h, --help                display this message and exit"
+    echo "    -v, --version             display program version"
+    echo "    -c, --config <path>       specify alternate config location"
+    echo "  Config Format:"
+    echo "    Each line in the config is an action taken when changing the theme"
+    echo "    There are currently three different action types"
+    echo '      cmd <command>           runs the specified command. $theme and $scheme'
+    echo "                              are available to use within this"
+    echo "      link <source> <dest>    will create a symlink from <source>/<theme>-<scheme>"
+    echo "                              to <dest>"
+    echo "      file <source> <dest>    will copy the file from <source> to <dest>, replacing"
+    echo '                              all instances of $theme and $scheme within it'
+    echo "    # can specify comments"
+}
+
+version () {
+    echo "1.0"
+}
+
+check_config () {
+    [ ! -f "$CONFIG" ] && echo "Config file not found. Check path" && exit 1
+}
+
+link () {
+    src="$(sh -c "echo \"$1\"")/$theme-$scheme"
+    dst="$(sh -c "echo \"$2\"")"
+    [ ! -f "$src" ] && [ ! -d "$src"] && echo "file does not exist: $src" && exit 1
+    ln -sf "$src" "$dst"
+}
+
+file () {
+    src="$(sh -c "echo \"$1\"")"
+    dst="$(sh -c "echo \"$2\"")"
+    [ ! -f "$src" ] && echo "file does not exist: $src" && exit 1
+    theme=$theme scheme=$scheme envsubst < "$src" > "$dst"
+}
+
+opts=$(! getopt -l "help,version,config:" -o "hvc:" -- $@ 2> /dev/null) && help && exit 1
+eval set -- "$opts"
+
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+        -h|--help)
+            help
+            exit 0
+            ;;
+        -v|--version)
+            version
+            exit 0
+            ;;
+        -c|--config)
+            shift
+            CONFIG="$1"
+            exit 0
+            ;;
+        --)
+            shift
+            break
+            ;;
+    esac
+    shift
+done
+check_config
+
+[ "$#" -ne 2 ] && help && exit 1
+theme="$1"
+scheme="$2"
+
+while read line; do
+    cmd="${line%% *}"
+    opt="${line#* }"
+
+    case "$cmd" in
+        "#"*|"")
+            continue
+            ;;
+        cmd)
+            theme=$theme scheme=$scheme sh -c "$opt"
+            [ "$?" -ne 0 ] && echo "Error running $line" && exit 1
+            ;;
+        link)
+            link $opt
+            ;;
+        file)
+            file $opt
+            ;;
+        *)
+            echo "Unknown command: $line" && exit 1
+            ;;
+    esac
+done < "$CONFIG"
+exit 0
