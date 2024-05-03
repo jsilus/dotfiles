@@ -2,6 +2,7 @@ import icons from "lib/icons"
 import { uptime } from "lib/variables"
 import options from "options"
 import powermenu, { Action } from "service/powermenu"
+import Lock from "service/lock"
 
 const battery = await Service.import("battery")
 const { image, size } = options.quicksettings.avatar
@@ -58,7 +59,12 @@ export const Header = () => Widget.Box(
             App.openWindow("settings-dialog")
         },
     }),
-    SysButton("lock"),
+    Widget.Button({
+        visible: Lock.bind("available"),
+        vpack: "center",
+        child: Widget.Icon(icons.powermenu.lock),
+        on_clicked: () => Lock.lock()
+    }),
     SysButton("logout"),
     SysButton("shutdown"),
 )

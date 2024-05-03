@@ -22,7 +22,9 @@ $button-radius: $radius;
 }
 
 .bar {
-    background-color: $bg;
+    @if not $bar-floating {
+        background-color: $bg;
+    }
 
     .panel-button {
         @include panel-button;

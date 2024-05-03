@@ -8,6 +8,7 @@ const deps = [
     "theme",
     "bar.flatButtons",
     "bar.position",
+    "bar.floating",
     "bar.battery.charging",
     "bar.battery.blocks",
 ]
@@ -76,6 +77,7 @@ const variables = (active) => [
     $("charging-bg", active.battery.charging),
     $("bar-battery-blocks", options.bar.battery.blocks),
     $("bar-position", options.bar.position),
+    $("bar-floating", options.bar.floating),
     $("hyprland-gaps-multiplier", options.hyprland.gaps),
 ]
 

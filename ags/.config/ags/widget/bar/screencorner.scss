@@ -8,7 +8,9 @@ window.screen-corner {
         margin-left: $_margin * -1;
 
         @if $shadows {
-            box-shadow: inset 0 0 $_shadow-size 0 $shadow-color;
+            @if not $bar-floating {
+                box-shadow: inset 0 0 $_shadow-size 0 $shadow-color;
+            }
         }
 
         @if $bar-position =="top" {
@@ -21,12 +23,14 @@ window.screen-corner {
     }
 
     box.border {
-        @if $bar-position =="top" {
-            border-top: $border-width solid $bg;
-        }
+        @if not $bar-floating {
+            @if $bar-position =="top" {
+                border-top: $border-width solid $bg;
+            }
 
-        @if $bar-position =="bottom" {
-            border-bottom: $border-width solid $bg;
+            @if $bar-position =="bottom" {
+                border-bottom: $border-width solid $bg;
+            }
         }
 
         margin-right: $_margin;

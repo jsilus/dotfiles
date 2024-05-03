@@ -191,6 +191,7 @@ const options = mkOptions(OPTIONS, {
         flatButtons: opt(false),
         position: opt<"top" | "bottom">("top"),
         corners: opt(false),
+        floating: opt(false),
         layout: {
             start: opt<Array<import("widget/bar/Bar").BarWidget>>([
                 "launcher",
@@ -297,7 +298,6 @@ const options = mkOptions(OPTIONS, {
         reboot: opt("systemctl reboot"),
         logout: opt("pkill Hyprland"),
         shutdown: opt("shutdown now"),
-        lock: opt("hyprlock"),
         layout: opt<"line" | "box">("line"),
         labels: opt(true),
     },
@@ -318,6 +318,9 @@ const options = mkOptions(OPTIONS, {
 
     datemenu: {
         position: opt<"left" | "center" | "right">("center"),
+        time: {
+            format: opt("%I:%M%p"),
+        },
         weather: {
             interval: opt(60_000),
             unit: opt<"metric" | "imperial" | "standard">("metric"),
@@ -350,6 +353,9 @@ const options = mkOptions(OPTIONS, {
         position: opt<Array<"top" | "bottom" | "left" | "right">>(["top", "right"]),
         blacklist: opt(["spotify_player"]),
         width: opt(440),
+        time: {
+            format: opt("%I:%M %p"),
+        },
     },
 
     hyprland: {
