@@ -30,6 +30,7 @@ const {
     shadows,
     widget,
     border,
+    background,
 } = theme
 
 const {
@@ -46,8 +47,9 @@ export default [
         ),
         Group("Theme",
             Row({ opt: shadows, title: "Shadows" }),
-            Row({ opt: widget.opacity, title: "Widget Opacity", max: 100 }),
-            Row({ opt: border.opacity, title: "Border Opacity", max: 100 }),
+            Row({ opt: background.transparency, title: "Background Transparency", max: 100 }),
+            Row({ opt: widget.transparency, title: "Widget Transparency", max: 100 }),
+            Row({ opt: border.transparency, title: "Border Transparency", max: 100 }),
             Row({ opt: border.width, title: "Border Width" }),
             Row({ opt: blur, title: "Blur", note: "0 to disable", max: 70 }),
         ),

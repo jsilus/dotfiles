@@ -25,6 +25,7 @@ const {
     shadows,
     widget,
     border,
+    background,
 } = options.theme
 
 const popoverPaddingMultiplier = 1.6
@@ -37,7 +38,7 @@ const t = (dark: Opt<any> | string, light: Opt<any> | string) => scheme.value ==
 const $ = (name: string, value: string | Opt<any>) => `$${name}: ${value};`
 
 const variables = (active) => [
-    $("bg", blur.value ? `transparentize(${active.bg}, ${blur.value / 100})` : active.bg),
+    $("bg", background.transparency.value ? `transparentize(${active.bg}, ${background.transparency.value / 100})` : active.bg),
     $("fg", active.fg),
 
     $("primary-bg", active.primary.bg),
@@ -54,20 +55,20 @@ const variables = (active) => [
 
     $("shadows", `${shadows}`),
 
-    $("widget-bg", `transparentize(${active.widget}, ${widget.opacity.value / 100})`),
+    $("widget-bg", `transparentize(${active.widget}, ${widget.transparency.value / 100})`),
 
-    $("hover-bg", `transparentize(${active.widget}, ${(widget.opacity.value * .9) / 100})`),
+    $("hover-bg", `transparentize(${active.widget}, ${(widget.transparency.value * .9) / 100})`),
     $("hover-fg", `lighten(${active.fg}, 8%)`),
 
     $("border-width", `${border.width}px`),
-    $("border-color", `transparentize(${active.border}, ${border.opacity.value / 100})`),
+    $("border-color", `transparentize(${active.border}, ${border.transparency.value / 100})`),
     $("border", "$border-width solid $border-color"),
 
     $("active-gradient", `linear-gradient(to right, ${active.primary.bg}, darken(${active.primary.bg}, 4%))`),
     $("shadow-color", t("rgba(0,0,0,.6)", "rgba(0,0,0,.4)")),
     $("text-shadow", t("2pt 2pt 2pt $shadow-color", "none")),
 
-    $("popover-border-color", `transparentize(${active.border}, ${Math.max(((border.opacity.value - 1) / 100), 0)})`),
+    $("popover-border-color", `transparentize(${active.border}, ${Math.max(((border.transparency.value - 1) / 100), 0)})`),
     $("popover-padding", `$padding * ${popoverPaddingMultiplier}`),
     $("popover-radius", radius.value === 0 ? "0" : "$radius + $popover-padding"),
 

@@ -1,42 +1,45 @@
 import RegularWindow from "widget/RegularWindow"
 import Lock from "service/lock"
+import icons from "lib/icons"
 
-const LoginBox = () => Widget.Box({
-                vertical: true,
-                vpack: "center",
-                hpack: "center",
-                spacing: 16,
-                children: [
-                    Widget.Box({
-                        hpack: "center",
-                        class_name: "avatar",
-                    }),
-                    Widget.Box({
-                        class_name: "entry-box",
-                        vertical: true,
-                        children: [
-                            Widget.Label("Enter password:"),
-                            Widget.Separator(),
-                            Widget.Entry({
-                                hpack: "center",
-                                xalign: 0.5,
-                                visibility: false,
-                                placeholder_text: "password",
-                                on_accept: self => {
-                                    self.sensitive = false;
-                                    Utils.authenticate(self.text ?? "")
-                                    .then(() => Lock.unlock())
-                                    .catch(e => {
-                                        self.text = ""
-                                        self.parent.children[0].label = e.message
-                                        console.warn(e.message)
-                                        self.sensitive = true
-                                    });
-                                }
-                            }).on("realize", (entry) => entry.grab_focus()),
-                        ]
-                    })
-                ],
+const LockBox = () => Widget.Box({
+    class_name: "lock-box",
+    vertical: true,
+    vpack: "center",
+    hpack: "center",
+    spacing: 16,
+    children: [
+        Widget.Icon({
+            class_name: "lock-icon",
+            hpack: "center",
+            icon: icons.ui.lock,
+        }),
+        Widget.Box({
+            vertical: true,
+            spacing: 5,
+            children: [
+                Widget.Label(""),
+                Widget.Separator(),
+                Widget.Entry({
+                    hpack: "center",
+                    xalign: 0.5,
+                    visibility: false,
+                    placeholder_text: "Password",
+                    on_accept: self => {
+                        self.sensitive = false;
+                        Utils.authenticate(self.text ?? "")
+                        .then(() => Lock.unlock())
+                        .catch(e => {
+                            self.text = ""
+                            self.parent.children[0].label = "Incorrect Password"
+                            console.warn(e.message)
+                            self.sensitive = true
+                        });
+                    }
+                }).on("realize", (entry) => entry.grab_focus()),
+            ]
+        })
+    ],
 })
 
 export const LockWindow = () => RegularWindow({
@@ -55,7 +58,13 @@ export const LockWindow = () => RegularWindow({
                         expand: true,
                     }),
                     overlays: [
-                        LoginBox(),
+                        Widget.Box({
+                            hpack: "end",
+                            vpack: "start",
+                            children: [
+                            ],
+                        }),
+                        LockBox(),
                     ],
                 })
             }).on("realize", self => Utils.idle(() => self.reveal_child = true)),

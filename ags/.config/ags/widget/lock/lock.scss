@@ -1,13 +1,42 @@
+@use 'sass:color';
+
 window#lock {
+    background: transparent;
     .background {
         background-image: url($wallpaper);
+        background-size: cover;
     }
-    background: transparent;
 
-    .lock-container {
-        background-image: url($wallpaper);
-    }
-    .password {
+    .lock-box {
+        color: $fg;
+        background-color: $bg;
         border-radius: $radius;
+        border-width: $border-width;
+        border-color: $border-color;
+
+        padding: 2em 1em 1em 1em;
+
+        .lock-icon {
+            font-size: 4em;
+            margin-bottom: 1rem;
+        }
+
+        entry {
+            color: $fg;
+            background-color: color.change($widget-bg, $alpha: 0.5);
+            caret-color: $fg;
+            border-radius: $radius;
+            box-shadow: none;
+            outline-color: transparent;
+            border-color: $border-color;
+            border-width: $border-width;
+            &:focused {
+                border-color: $primary-bg;
+            }
+        }
+
+        input:focus, textarea {
+            outline: none;
+        }
     }
 }
