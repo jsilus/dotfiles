@@ -1,0 +1,13 @@
+window#lock {
+    .background {
+        background-image: url($wallpaper);
+    }
+    background: transparent;
+
+    .lock-container {
+        background-image: url($wallpaper);
+    }
+    .password {
+        border-radius: $radius;
+    }
+}

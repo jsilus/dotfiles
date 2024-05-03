@@ -38,7 +38,7 @@ class Lock extends Service {
             return
         console.log("Unlocking...")
         this.#windows.forEach(w => w.window.child.children[0].reveal_child = false)
-        Utils.timeout(500, () => {
+        Utils.timeout(1000, () => {
             this.#lock.unlock_and_destroy()
             this.reset_lock()
         })
@@ -107,6 +107,7 @@ class Lock extends Service {
 
 function on_locked() {
     console.log("Your session is now locked")
+    Utils.timeout(5000, () => lock.unlock())
 }
 
 function on_finished() {

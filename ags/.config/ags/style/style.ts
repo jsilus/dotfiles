@@ -2,6 +2,7 @@
 import { type Opt } from "lib/option"
 import options from "options"
 import { bash, dependencies, sh } from "lib/utils"
+import wallpaper from "service/wallpaper"
 
 const deps = [
     "font",
@@ -79,6 +80,7 @@ const variables = (active) => [
     $("bar-position", options.bar.position),
     $("bar-floating", options.bar.floating),
     $("hyprland-gaps-multiplier", options.hyprland.gaps),
+    $("wallpaper", `"${wallpaper.wallpaper}"`),
 ]
 
 async function resetCss() {
@@ -102,4 +104,5 @@ async function resetCss() {
 
 Utils.monitorFile(App.configDir, resetCss)
 options.handler(deps, resetCss)
+wallpaper.connect("changed", resetCss)
 await resetCss()

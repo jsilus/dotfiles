@@ -2,11 +2,6 @@ import RegularWindow from "widget/RegularWindow"
 import Lock from "service/lock"
 
 const LoginBox = () => Widget.Box({
-    children: [
-        Widget.Overlay({
-            hexpand: true,
-            vexpand: true,
-            child: Widget.Box({
                 vertical: true,
                 vpack: "center",
                 hpack: "center",
@@ -41,34 +36,29 @@ const LoginBox = () => Widget.Box({
                             }).on("realize", (entry) => entry.grab_focus()),
                         ]
                     })
-                ]
-            }),
-            overlays: [
-            ]
-        })
-    ]
+                ],
 })
 
 export const LockWindow = () => RegularWindow({
-    css: "background-color: transparent;",
+    name: "lock",
     child: Widget.Box({
         children: [
             Widget.Revealer({
                 reveal_child: false,
                 transition: "crossfade",
                 transition_duration: 500,
-                child: Widget.Box({
-                    class_name: "lock-container",
-                    vertical: true,
-                    children: [
-                        Widget.Overlay({
-                            child: LoginBox(),
-                            overlays: [
-                            ]
-                        })
-                    ]
+                child: Widget.Overlay({
+                    child: Widget.Box({
+                        class_name: "background",
+                        hpack: "fill",
+                        vpack: "fill",
+                        expand: true,
+                    }),
+                    overlays: [
+                        LoginBox(),
+                    ],
                 })
-            }).on("realize", self => Utils.idle(() => self.reveal_child = true))
+            }).on("realize", self => Utils.idle(() => self.reveal_child = true)),
         ]
     })
 })
