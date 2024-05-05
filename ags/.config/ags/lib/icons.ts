@@ -1,15 +1,10 @@
 export const substitutes = {
-    "transmission-gtk": "transmission",
-    "blueberry.py": "blueberry",
-    "Caprine": "facebook-messenger",
-    "com.raggesilver.BlackBox-symbolic": "terminal-symbolic",
-    "org.wezfurlong.wezterm-symbolic": "terminal-symbolic",
-    "audio-headset-bluetooth": "audio-headphones-symbolic",
     "audio-card-analog-usb": "audio-speakers-symbolic",
     "audio-card-analog-pci": "audio-card-symbolic",
-    "preferences-system": "emblem-system-symbolic",
     "com.github.Aylur.ags-symbolic": "controls-symbolic",
     "com.github.Aylur.ags": "controls-symbolic",
+    "audio-headphones-bluetooth": "audio-headphones-symbolic",
+    "audio-headset-bluetooth": "audio-headphones-symbolic",
 }
 
 export default {
@@ -126,5 +121,25 @@ export default {
     color: {
         dark: "dark-mode-symbolic",
         light: "light-mode-symbolic",
+    },
+    weather: {
+        "01d": "weather-clear",
+        "01n": "weather-clear-night",
+        "02d": "weather-few-clouds",
+        "02n": "weather-few-clouds-night",
+        "03d": "weather-clouds",
+        "03n": "weather-clouds-night",
+        "04d": "weather-overcast",
+        "04n": "weather-overcast",
+        "09d": "weather-showers-scattered",
+        "09n": "weather-showers-scattered",
+        "10d": "weather-showers",
+        "10n": "weather-showers",
+        "11d": "weather-storm",
+        "11n": "weather-storm",
+        "13d": "weather-snow",
+        "13n": "weather-snow",
+        "50d": "weather-fog",
+        "50n": "weather-fog",
     },
 }

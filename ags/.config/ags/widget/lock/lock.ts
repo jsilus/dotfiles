@@ -1,6 +1,10 @@
 import RegularWindow from "widget/RegularWindow"
-import Lock from "service/lock"
+import lock from "service/lock"
 import icons from "lib/icons"
+import { getMonitorName } from "lib/utils"
+
+const SCREENSHOT_PATH = "/tmp/lockscreen-screenshot"
+export const TRANSITION_TIME = 750
 
 const LockBox = () => Widget.Box({
     class_name: "lock-box",
@@ -28,12 +32,13 @@ const LockBox = () => Widget.Box({
                     on_accept: self => {
                         self.sensitive = false;
                         Utils.authenticate(self.text ?? "")
-                        .then(() => Lock.unlock())
+                        .then(() => lock.unlock())
                         .catch(e => {
                             self.text = ""
                             self.parent.children[0].label = "Incorrect Password"
                             console.warn(e.message)
                             self.sensitive = true
+                            self.grab_focus()
                         });
                     }
                 }).on("realize", (entry) => entry.grab_focus()),
@@ -42,20 +47,24 @@ const LockBox = () => Widget.Box({
     ],
 })
 
-export const LockWindow = () => RegularWindow({
+export const LockWindow = (monitor) => RegularWindow({
     name: "lock",
     child: Widget.Box({
         children: [
             Widget.Revealer({
                 reveal_child: false,
                 transition: "crossfade",
-                transition_duration: 500,
+                transition_duration: TRANSITION_TIME,
                 child: Widget.Overlay({
                     child: Widget.Box({
-                        class_name: "background",
                         hpack: "fill",
                         vpack: "fill",
                         expand: true,
+                        setup: self => {
+                            takeBlurredScreenshot(monitor).then(screenshotPath => {
+                                self.css = `background-image: url("${screenshotPath}");`
+                            }).catch(e => console.error(e))
+                        }
                     }),
                     overlays: [
                         Widget.Box({
@@ -71,3 +80,14 @@ export const LockWindow = () => RegularWindow({
         ]
     })
 })
+
+const takeBlurredScreenshot = async (monitor): Promise<string> => {
+	const monitorName = getMonitorName(monitor)
+	const screenshotPath = `${SCREENSHOT_PATH}-${monitorName}`
+
+	// We use PPM because it does not compress the image making grim much
+	// faster. Also, scaling the image somewhat improves performance of blurring
+	// the image
+	Utils.exec(`bash -c "grim -o ${monitorName} -t ppm - | convert - -encoding ppm -scale 10% -blur 0x01 -resize 1000% ${screenshotPath}"`)
+	return screenshotPath
+}

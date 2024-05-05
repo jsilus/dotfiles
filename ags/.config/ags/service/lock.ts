@@ -1,6 +1,6 @@
 import Gdk from "gi://Gdk?version=3.0"
 import { dependencies } from "lib/utils"
-import { LockWindow } from "widget/lock/lock"
+import { TRANSITION_TIME, LockWindow } from "widget/lock/lock"
 
 let GtkLock = null
 
@@ -21,37 +21,37 @@ class Lock extends Service {
     #lock = null
     #windows = []
 
-    reset_lock() {
+    readonly reset_lock() {
         this.#locked = false
         while (this.#windows.length > 0)
             this.#windows.pop()
         Gdk.Display.get_default()?.sync()
     }
 
-    handle_finished() {
+    readonly handle_finished() {
         this.#lock.destroy()
         this.reset_lock()
     }
 
-    unlock() {
+    readonly unlock() {
         if (!this.#locked)
             return
         console.log("Unlocking...")
         this.#windows.forEach(w => w.window.child.children[0].reveal_child = false)
-        Utils.timeout(1000, () => {
+        Utils.timeout(TRANSITION_TIME, () => {
             this.#lock.unlock_and_destroy()
             this.reset_lock()
         })
     }
 
     #newWindow(monitor) {
-        const window = LockWindow()
+        const window = LockWindow(monitor)
         const win = {window, monitor}
         this.#windows.push(win)
         return win
     }
 
-    lock() {
+    readonly lock() {
         if (!this.#available || this.#locked)
             return
         this.#locked = true
@@ -107,7 +107,7 @@ class Lock extends Service {
 
 function on_locked() {
     console.log("Your session is now locked")
-    Utils.timeout(5000, () => lock.unlock())
+    // Utils.timeout(5000, () => lock.unlock())
 }
 
 function on_finished() {

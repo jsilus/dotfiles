@@ -16,6 +16,7 @@ export default ({ address, size: [w, h], class: c, title }: Client) => Widget.Bu
     attribute: { address },
     tooltip_text: `${title}`,
     child: Widget.Icon({
+        size: options.bar.taskbar.iconSize.bind(),
         css: options.overview.scale.bind().as(v => `
             min-width: ${(v / 100) * w}px;
             min-height: ${(v / 100) * h}px;

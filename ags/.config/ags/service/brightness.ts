@@ -44,8 +44,6 @@ class Brightness extends Service {
             })
             this.#screenMax = get("max")
             this.#screen = get("get") / get("max")
-        } else {
-            console.warn("not using brightness slider")
         }
     }
 }

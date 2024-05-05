@@ -1,0 +1,8 @@
+#!/bin/sh
+
+COMPLETED_DIR="$HOME/Downloads/"
+ACTION="$(notify-send "Download Complete" "$(basename "$1")" -A "open=Open Downloads Folder")"
+
+if [ "$ACTION" = "open" ]; then
+    xdg-open "$COMPLETED_DIR"
+fi

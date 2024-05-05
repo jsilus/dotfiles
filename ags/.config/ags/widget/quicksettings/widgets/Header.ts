@@ -2,7 +2,7 @@ import icons from "lib/icons"
 import { uptime } from "lib/variables"
 import options from "options"
 import powermenu, { Action } from "service/powermenu"
-import Lock from "service/lock"
+import lock from "service/lock"
 
 const battery = await Service.import("battery")
 const { image, size } = options.quicksettings.avatar
@@ -28,6 +28,9 @@ const SysButton = (action: Action) => Widget.Button({
     child: Widget.Icon(icons.powermenu[action]),
     on_clicked: () => powermenu.action(action),
 })
+
+if (!lock.available)
+    console.log("not using lock screen")
 
 export const Header = () => Widget.Box(
     { class_name: "header horizontal" },
@@ -60,10 +63,10 @@ export const Header = () => Widget.Box(
         },
     }),
     Widget.Button({
-        visible: Lock.bind("available"),
+        visible: lock.bind("available"),
         vpack: "center",
         child: Widget.Icon(icons.powermenu.lock),
-        on_clicked: () => Lock.lock()
+        on_clicked: () => lock.lock()
     }),
     SysButton("logout"),
     SysButton("shutdown"),

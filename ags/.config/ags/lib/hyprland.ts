@@ -12,31 +12,22 @@ const {
         shadows,
         active,
         scheme,
+        primary,
     },
 } = options
 
-const darkActive = themes[active].dark.primary.bg
-const lightActive = themes[active].light.primary.bg
-
 const deps = [
     "hyprland",
-    spacing.id,
-    radius.id,
-    blur.id,
-    width.id,
-    shadows.id,
-    darkActive.id,
-    lightActive.id,
-    scheme.id,
+    "theme.spacing",
+    "theme.radius",
+    "theme.blur",
+    "theme.width",
+    "theme.shadows",
+    "theme.themes",
+    "theme.scheme",
+    "theme.active",
+    "theme.primary",
 ]
-
-function activeBorder() {
-    const color = scheme.value === "dark"
-        ? darkActive.value
-        : lightActive.value
-
-    return color.replace("#", "")
-}
 
 function sendBatch(batch: string[]) {
     const cmd = batch
@@ -54,7 +45,7 @@ async function setupHyprland() {
         `general:border_size ${width}`,
         `general:gaps_out ${wm_gaps}`,
         `general:gaps_in ${Math.floor(wm_gaps / 2)}`,
-        `general:col.active_border rgba(${activeBorder()}ff)`,
+        `general:col.active_border rgba(${themes[active][scheme][primary].bg.value.replace("#", "")}ff)`,
         `general:col.inactive_border rgba(${hyprland.inactiveBorder.value})`,
         `decoration:rounding ${radius}`,
         `decoration:drop_shadow ${shadows.value ? "yes" : "no"}`,

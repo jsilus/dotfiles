@@ -27,10 +27,10 @@ const LevelBar = () => {
         bar_mode: "discrete",
         max_value: blocks.bind(),
         visible: bar.bind().as(b => b !== "hidden"),
-        value: battery.bind("percent").as(p => (p / 100) * blocks.value),
+        value: battery.available ? battery.bind("percent").as(p => (p / 100) * blocks.value) : 0,
     })
     const update = () => {
-        level.value = (battery.percent / 100) * blocks.value
+        level.value = battery.available ? (battery.percent / 100) * blocks.value : 0,
         level.css = `block { min-width: ${width.value / blocks.value}pt; }`
     }
     return level

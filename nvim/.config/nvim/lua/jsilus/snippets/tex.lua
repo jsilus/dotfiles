@@ -183,7 +183,7 @@ return {
         \end{<>}
         ]],
         i(1), i(2), rep(1)
-    }, "m"),
+    }),
     autosnippet("([bBpvV])mat(\\d+)x(\\d+)([ar])", "Matrix", {
         [[
         \begin{<><>}<><>
@@ -202,22 +202,6 @@ return {
         capture(1),
         t("matrix"),
     }, "mr"),
-    autosnippet("case", "Case Block", {
-        [[
-        \begin{case}
-            <>
-        \end{case}
-        ]],
-        i(1)
-    }, "m"),
-    autosnippet("align", "Align Block", {
-        [[
-        \begin{align}
-            <>
-        \end{align}
-        ]],
-        i(1)
-    }, "m"),
 
     --------------
     -- fraction --

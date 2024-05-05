@@ -8,6 +8,9 @@ const BrightnessSlider = () => Widget.Slider({
     on_change: ({ value }) => brightness.screen = value,
 })
 
+if (!brightness.available)
+    console.log("not using brightness slider")
+
 export const Brightness = () => Widget.Box({
     class_name: "brightness",
     visible: brightness.bind("available"),

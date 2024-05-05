@@ -19,6 +19,7 @@ const {
     blur,
     active,
     scheme,
+    primary,
     padding,
     spacing,
     radius,
@@ -41,11 +42,11 @@ const variables = (active) => [
     $("bg", background.transparency.value ? `transparentize(${active.bg}, ${background.transparency.value / 100})` : active.bg),
     $("fg", active.fg),
 
-    $("primary-bg", active.primary.bg),
-    $("primary-fg", active.primary.fg),
+    $("primary-bg", active[primary].bg),
+    $("primary-fg", active[primary].fg),
 
-    $("error-bg", active.error.bg),
-    $("error-fg", active.error.fg),
+    $("error-bg", active.red.bg),
+    $("error-fg", active.red.fg),
 
     $("scheme", scheme),
     $("padding", `${padding}pt`),
@@ -64,7 +65,7 @@ const variables = (active) => [
     $("border-color", `transparentize(${active.border}, ${border.transparency.value / 100})`),
     $("border", "$border-width solid $border-color"),
 
-    $("active-gradient", `linear-gradient(to right, ${active.primary.bg}, darken(${active.primary.bg}, 4%))`),
+    $("active-gradient", `linear-gradient(to right, ${active[primary].bg}, darken(${active[primary].bg}, 4%))`),
     $("shadow-color", t("rgba(0,0,0,.6)", "rgba(0,0,0,.4)")),
     $("text-shadow", t("2pt 2pt 2pt $shadow-color", "none")),
 
@@ -76,7 +77,7 @@ const variables = (active) => [
     $("font-name", options.font.name),
 
     // etc
-    $("charging-bg", active.battery.charging),
+    $("charging-bg", active.green.bg),
     $("bar-battery-blocks", options.bar.battery.blocks),
     $("bar-position", options.bar.position),
     $("bar-floating", options.bar.floating),

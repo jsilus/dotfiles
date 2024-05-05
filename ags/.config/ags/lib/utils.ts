@@ -5,6 +5,8 @@ import Gtk from "gi://Gtk?version=3.0"
 import Gdk from "gi://Gdk"
 import GLib from "gi://GLib?version=2.0"
 
+const hyprland = await Service.import("hyprland")
+
 export type Binding<T> = import("types/service").Binding<any, any, T>
 
 /**
@@ -62,7 +64,7 @@ export async function sh(cmd: string | string[]) {
 
 export function forMonitors(widget: (monitor: number) => Gtk.Window) {
     const n = Gdk.Display.get_default()?.get_n_monitors() || 1
-    return range(n, 0).map(widget).flat(1)
+    return range(n, 0).flatMap(widget)
 }
 
 /**
@@ -122,4 +124,43 @@ export function createSurfaceFromWidget(widget: Gtk.Widget) {
     cr.fill()
     widget.draw(cr)
     return surface
+}
+
+export const getDisplay = () => {
+	const display = Gdk.Display.get_default()
+
+	if (!display)
+		throw "No display!"
+
+	return display
+}
+
+export const getMonitors = (): Array<Gdk.Monitor> => {
+	const display = getDisplay()
+	let monitors = []
+
+	for (let monitorNumber = 0; monitorNumber < (display.get_n_monitors() || 1); monitorNumber++) {
+		const monitor = display.get_monitor(monitorNumber)
+		if (!monitor)
+            continue
+
+		monitors.push(monitor)
+	}
+
+	return monitors
+}
+
+export const getMonitorName = (searchedMonitor: Gdk.Monitor): string => {
+	const errorString = "No monitor found";
+
+	for (const [index, monitor] of getMonitors().entries()) {
+		if (monitor === searchedMonitor) {
+			const monitor = hyprland.getMonitor(index)
+			if (!monitor)
+                throw errorString
+			return monitor.name
+		}
+	}
+
+	return errorString;
 }

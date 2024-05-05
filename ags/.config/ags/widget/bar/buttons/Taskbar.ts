@@ -65,9 +65,9 @@ const AppItem = (address: string) => {
 
 function sortItems<T extends { attribute: { address: string } }>(arr: T[]) {
     return arr.sort(({ attribute: a }, { attribute: b }) => {
-        const aclient = hyprland.getClient(a.address)!
-        const bclient = hyprland.getClient(b.address)!
-        return aclient.workspace.id - bclient.workspace.id
+        const aclient = hyprland.getClient(a.address)
+        const bclient = hyprland.getClient(b.address)
+        return aclient?.workspace.id - bclient?.workspace.id
     })
 }
 

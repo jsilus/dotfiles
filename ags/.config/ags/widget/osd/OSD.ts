@@ -85,18 +85,20 @@ export default (monitor: number) => Widget.Window({
     child: Widget.Box({
         css: "padding: 2px;",
         expand: true,
-        child: Widget.Overlay(
-            { child: Widget.Box({ expand: true }) },
-            Widget.Box({
-                hpack: progress.pack.h.bind(),
-                vpack: progress.pack.v.bind(),
-                child: progress.vertical.bind().as(OnScreenProgress),
-            }),
-            Widget.Box({
-                hpack: microphone.pack.h.bind(),
-                vpack: microphone.pack.v.bind(),
-                child: MicrophoneMute(),
-            }),
-        ),
+        child: Widget.Overlay({
+            child: Widget.Box({ expand: true }),
+            overlays: [
+                Widget.Box({
+                    hpack: progress.pack.h.bind(),
+                    vpack: progress.pack.v.bind(),
+                    child: progress.vertical.bind().as(OnScreenProgress),
+                }),
+                Widget.Box({
+                    hpack: microphone.pack.h.bind(),
+                    vpack: microphone.pack.v.bind(),
+                    child: MicrophoneMute(),
+                }),
+            ]
+        }),
     }),
 })

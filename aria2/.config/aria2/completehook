@@ -10,8 +10,4 @@ if [ "$COUNT" -eq 0 ]; then
     rm -r "$DOWNLOADING_DIR"
 fi
 
-ACTION="$(notify-send "Download Complete" "$(basename "$3")" -A "open=Open Downloads Folder")"
-
-if [ "$ACTION" = "open" ]; then
-    kitty lf ~/Downloads
-fi
+"$HOME"/.config/aria2/notification "$3" &

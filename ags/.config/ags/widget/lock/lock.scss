@@ -30,7 +30,7 @@ window#lock {
             outline-color: transparent;
             border-color: $border-color;
             border-width: $border-width;
-            &:focused {
+            &:focus {
                 border-color: $primary-bg;
             }
         }
