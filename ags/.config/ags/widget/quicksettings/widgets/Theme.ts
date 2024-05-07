@@ -1,17 +1,21 @@
-import { Menu, ArrowToggleButton, opened } from "../ToggleButton"
+import { Menu, ArrowToggleButton, DoubleArrowToggleButton, opened } from "../ToggleButton"
 import icons from "lib/icons"
 import options from "options"
 
 const {
     themes,
     active,
+    primary,
 } = options.theme
 
-export const ThemeToggle = () => ArrowToggleButton({
+const colors = ["red", "green", "yellow", "blue", "purple", "teal", "orange"]
+
+export const ThemeToggle = () => DoubleArrowToggleButton({
     name: "theme",
+    other: "primarycolor",
     icon: active.bind().as(n => themes[n].icon.value),
     label: active.bind().as(n => themes[n].display.value),
-    connection: [opened, () => opened.value === "theme"],
+    connection: [opened, () => opened.value === "theme" || opened.value === "primarycolor"],
     deactivate: () => {},
     activate: () => opened.setValue("theme"),
     activateOnArrow: false,
@@ -37,6 +41,28 @@ export const ThemeSelection = () => Menu({
                                 label: obj.icon.value
                             }),
                             Widget.Label(obj.display.value),
+                        ]
+                    })
+                })
+            }),
+        }),
+    ],
+})
+
+export const PrimaryColorSelection = () => Menu({
+    name: "primarycolor",
+    icon: icons.ui.themes,
+    title: "Primary Color Selection",
+    content: [
+        Widget.Box({
+            vertical: true,
+            children: colors.map(color => {
+                return Widget.Button({
+                    class_name: primary.bind().as(p => p == color ? "active" : ""),
+                    on_clicked: () => primary.value = color,
+                    child: Widget.Box({
+                        children: [
+                            Widget.Label(color),
                         ]
                     })
                 })

@@ -96,6 +96,69 @@ export const ArrowToggleButton = ({
     ],
 })
 
+type DoubleArrowToggleButtonProps = {
+    name: string
+    other: string
+    icon: IconProps["icon"]
+    label: LabelProps["label"]
+    activate: () => void
+    deactivate: () => void
+    activateOnArrow?: boolean
+    stringIcon?: boolean
+    connection: [GObject.Object, () => boolean]
+}
+export const DoubleArrowToggleButton = ({
+    name,
+    other,
+    icon,
+    label,
+    activate,
+    deactivate,
+    activateOnArrow = true,
+    stringIcon = false,
+    connection: [service, condition],
+}: DoubleArrowToggleButtonProps) => Widget.Box({
+    class_name: "toggle-button",
+    setup: self => self.hook(service, () => {
+        self.toggleClassName("active", condition())
+    }),
+    children: [
+        Widget.Button({
+            child: Widget.Box({
+                hexpand: true,
+                children: [
+                    stringIcon ?
+                    Widget.Label({
+                        class_name: "icon",
+                        label: icon,
+                    }) :
+                    Widget.Icon({
+                        class_name: "icon",
+                        icon,
+                    }),
+                    Widget.Label({
+                        class_name: "label",
+                        max_width_chars: 10,
+                        truncate: "end",
+                        label,
+                    }),
+                ],
+            }),
+            on_clicked: () => {
+                if (condition()) {
+                    deactivate()
+                    if (opened.value === name || opened.value === other)
+                        opened.value = ""
+                } else {
+                    activate()
+                }
+            },
+        }),
+        Arrow(other),
+        Arrow(name, activateOnArrow && activate),
+    ],
+})
+
 type MenuProps = {
     name: string
     icon: IconProps["icon"]
