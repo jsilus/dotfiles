@@ -1,0 +1,27 @@
+#!/bin/sh
+
+case "$theme" in
+    catppuccin-dark)
+        kittytheme="Catppuccin-Mocha"
+        ;;
+    catppuccin-light)
+        kittytheme="Catppuccin-Latte"
+        ;;
+    gruvbox-dark)
+        kittytheme="Gruvbox Dark"
+        ;;
+    gruvbox-light)
+        kittytheme="Gruvbox Light"
+        ;;
+    kanagawa-dark)
+        kittytheme="Kanagawa"
+        ;;
+    kanagawa-light)
+        kittytheme="Kanagawa_light"
+        ;;
+    nord-dark|nord-light)
+        kittytheme="Nord"
+        ;;
+esac
+
+kitty kitten themes --reload-in=all "$kittytheme"

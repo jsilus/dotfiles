@@ -2,8 +2,13 @@ import RegularWindow from "widget/RegularWindow"
 import lock from "service/lock"
 import icons from "lib/icons"
 import { getMonitorName } from "lib/utils"
+import { clock } from "lib/variables"
+import options from "options"
 
-const SCREENSHOT_PATH = "/tmp/lockscreen-screenshot"
+const { format, action } = options.bar.date
+const time = Utils.derive([clock, format], (c, f) => c.format(f) || "")
+
+const SCREENSHOT_PATH = `${TMP}/lockscreen-screenshot`
 export const TRANSITION_TIME = 750
 
 const LockBox = () => Widget.Box({
@@ -67,11 +72,23 @@ export const LockWindow = (monitor) => RegularWindow({
                         }
                     }),
                     overlays: [
-                        Widget.Box({
-                            hpack: "end",
+                        Widget.CenterBox({
                             vpack: "start",
-                            children: [
-                            ],
+                            centerWidget: Widget.Label({
+                                class_name: "time",
+                                justification: "center",
+                                label: time.bind(),
+                            }),
+                            endWidget: Widget.Box({
+                                hpack: "end",
+                                children: [
+                                    Widget.Button({
+                                        class_name: "power",
+                                        on_clicked: () => Utils.exec(options.powermenu.shutdown.value),
+                                        child: Widget.Icon(icons.powermenu.shutdown),
+                                    }),
+                                ],
+                            }),
                         }),
                         LockBox(),
                     ],

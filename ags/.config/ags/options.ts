@@ -4,6 +4,7 @@ import icons from "lib/icons"
 import themes from "style/themes"
 
 const options = mkOptions(OPTIONS, {
+    terminal: opt("kitty"),
     wallpaper: {
         resolution: opt<import("service/wallpaper").Resolution>(1920),
         market: opt<import("service/wallpaper").Market>("random"),
@@ -173,8 +174,8 @@ const options = mkOptions(OPTIONS, {
             interval: opt(60_000),
             unit: opt<"metric" | "imperial" | "standard">("imperial"),
             key: opt<string>(""),
-            latitude: opt<number>(),
-            longitude: opt<number>(),
+            latitude: opt<number>(0),
+            longitude: opt<number>(0),
         },
     },
 

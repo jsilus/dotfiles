@@ -1,0 +1,3 @@
+#!/bin/sh
+envsubst < "$HOME/.config/theme/mpv/mpv.base.conf" > "$HOME/.config/mpv/mpv.conf"
+envsubst < "$HOME/.config/theme/mpv/uosc.base.conf" > "$HOME/.config/mpv/script-opts/uosc.conf"

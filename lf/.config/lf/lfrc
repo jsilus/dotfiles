@@ -271,3 +271,6 @@ map zp toggle_preview
 map x $$f
 map X !$f
 map o $xdg-open $f
+
+# elevate to root
+map Su $su -p -c lf

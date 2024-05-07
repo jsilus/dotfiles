@@ -28,6 +28,7 @@ export const ThemeSelection = () => Menu({
             children: Object.keys(themes).map(key => {
                 const obj = themes[key]
                 return Widget.Button({
+                    class_name: active.bind().as(a => a == key ? "active" : ""),
                     on_clicked: () => options.theme.active.value = key,
                     child: Widget.Box({
                         children: [
@@ -36,12 +37,6 @@ export const ThemeSelection = () => Menu({
                                 label: obj.icon.value
                             }),
                             Widget.Label(obj.display.value),
-                            Widget.Icon({
-                                icon: icons.tick,
-                                hexpand: true,
-                                hpack: 'end',
-                                visible: active.bind().as(x => x === key),
-                            })
                         ]
                     })
                 })

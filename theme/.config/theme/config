@@ -1,5 +1,0 @@
-# bat
-cmd echo "--theme=\"$theme-$scheme\"" > $XDG_CONFIG_HOME/bat/config
-
-# git diffs with delta
-file "$XDG_CONFIG_HOME/git/themes/theme.gitconfig" "$XDG_CONFIG_HOME/git/theme.gitconfig"

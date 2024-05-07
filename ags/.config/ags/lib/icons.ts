@@ -31,7 +31,7 @@ export default {
         refresh: "view-refresh-symbolic",
         search: "system-search-symbolic",
         settings: "emblem-system-symbolic",
-        themes: "preferences-desktop-theme-symbolic",
+        themes: "theme-preferences-symbolic",
         tick: "object-select-symbolic",
         time: "hourglass-symbolic",
         toolbars: "toolbars-symbolic",

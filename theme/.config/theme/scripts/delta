@@ -1,0 +1,2 @@
+#!/bin/sh
+envsubst < "$HOME/.config/git/themes/theme.gitconfig" > "$HOME/.config/git/theme.gitconfig"

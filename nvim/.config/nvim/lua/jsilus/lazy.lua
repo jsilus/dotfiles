@@ -11,7 +11,7 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup({{import = "jsilus.plugins"}, {import = "jsilus.plugins.lsp"}}, {
+require("lazy").setup({{import = "jsilus.plugins"}, {import = "jsilus.plugins.lsp"}, {import = "jsilus.plugins.colors"}}, {
     checker = {
         enabled = true,
         notify = false,

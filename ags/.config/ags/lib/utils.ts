@@ -4,6 +4,7 @@ import icons, { substitutes } from "./icons"
 import Gtk from "gi://Gtk?version=3.0"
 import Gdk from "gi://Gdk"
 import GLib from "gi://GLib?version=2.0"
+import options from "options"
 
 const hyprland = await Service.import("hyprland")
 
@@ -102,7 +103,11 @@ export function launchApp(app: Application) {
         .filter(str => !str.startsWith("%") && !str.startsWith("@"))
         .join(" ")
 
-    bash(`${exe} &`)
+    if (app.app.get_boolean("Terminal"))
+        sh(`${options.terminal.value} ${exe}`)
+    else
+        bash(`${exe} &`)
+
     app.frequency += 1
 }
 

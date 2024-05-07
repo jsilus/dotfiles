@@ -1,0 +1,15 @@
+#!/bin/sh
+
+case "$theme" in
+    catppuccin-dark)
+        nvimtheme="catppuccin-mocha"
+        ;;
+    catppuccin-light)
+        nvimtheme="catppuccin-latte"
+        ;;
+    gruvbox-dark|gruvbox-light)
+        nvimtheme="gruvbox"
+        ;;
+esac
+
+echo "colorscheme $nvimtheme" > "$HOME/.cache/nvim/theme"
