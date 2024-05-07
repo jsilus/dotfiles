@@ -91,3 +91,5 @@ setopt PROMPT_SUBST
 PROMPT=$newline\
 $directory$sshhost$gitbranch$exectime$newline\
 $indicator
+
+PS2='${${${(%):-%_}//[^ ]}// /  }    '
