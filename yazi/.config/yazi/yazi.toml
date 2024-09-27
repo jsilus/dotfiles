@@ -1,0 +1,28 @@
+[manager]
+show_symlink = false
+scrolloff = 10
+sort_by = "natural"
+
+[preview]
+tab_size       = 2
+max_width      = 600
+max_height     = 900
+cache_dir      = ""
+image_filter   = "lanczos3"
+image_quality  = 75
+sixel_fraction = 15
+
+[tasks]
+micro_workers    = 10
+macro_workers    = 25
+bizarre_retry    = 5
+image_alloc      = 536870912  # 512MB
+image_bound      = [ 0, 0 ]
+suppress_preload = false
+
+[plugin]
+prepend_previewers = [
+    { mime = "inode/x-empty",  run = "noop" },
+    { name = "*.md",  run = "glow" },
+    { mime = "text/*", run = "bat" },
+]
