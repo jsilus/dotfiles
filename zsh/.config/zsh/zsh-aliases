@@ -15,3 +15,5 @@ alias mv="mv -i"
 alias cp="cp -i"
 
 alias spt="spotify_player"
+
+alias duf="duf -only local,network"

@@ -4,4 +4,4 @@ FILE=$(basename $1)
 EXT=${FILE##*.}
 NAME=${FILE%.*}
 
-ffmpeg -i $FILE -map_metadata -1 -map_chapters -1 "$NAME-out.$EXT" && rm $1 && mv "$NAME-out.$EXT" $1
+ffmpeg -i $FILE -map_metadata -1 -map_chapters -1 "$NAME-out.mp4" && rm $1 && mv "$NAME-out.mp4" "$NAME.mp4"

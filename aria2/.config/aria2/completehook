@@ -3,11 +3,19 @@
 COMPLETED_DIR="$HOME/Downloads/"
 DOWNLOADING_DIR="$HOME/Downloads/.downloading/"
 
-mv "$3" "$COMPLETED_DIR/$(basename "$3")"
+FILE="$(basename "$3")"
+FINAL="$COMPLETED_DIR/$FILE"
+mv "$3" "$FINAL"
 
-COUNT="$(ls -1 "$DOWNLOADING_DIR" | wc -l)"
+LOG_FILE="$HOME/Downloads/.downloading/downloads.json"
+TEMP_FILE="$(mktemp)"
+
+jq --arg name "$FILE" 'del(.[] | select(.name == $name))' "$LOG_FILE" > "$TEMP_FILE"
+mv "$TEMP_FILE" "$LOG_FILE"
+
+COUNT="$(jq '. | length' "$LOG_FILE")"
 if [ "$COUNT" -eq 0 ]; then
     rm -r "$DOWNLOADING_DIR"
 fi
 
-"$HOME"/.config/aria2/notification "$3" &
+"$HOME"/.config/aria2/notification "$FINAL" &

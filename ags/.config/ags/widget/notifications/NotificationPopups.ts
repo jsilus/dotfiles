@@ -41,6 +41,8 @@ function Animated(id: number) {
                 outer.reveal_child = false
                 timeout(transition.value, () => {
                     box.destroy()
+                    if (n.urgency == "low")
+                        n.close()
                 })
             })
         },

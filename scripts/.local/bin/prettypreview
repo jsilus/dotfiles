@@ -23,6 +23,9 @@ case "$mime" in
         echo -e "\033[7mbinary data"
         exit 0
         ;;
+    application/vnd.sqlite3)
+        sqlite3 "$file" "select name from sqlite_master where type = 'table';" | xargs -I {} bash -c 'echo "{}:" ; sqlite3 '"$file"' -header -box "select * from {} ;" ; echo ""'
+        exit 0
 esac
 
 case "$file" in

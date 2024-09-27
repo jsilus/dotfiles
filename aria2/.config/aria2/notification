@@ -1,8 +1,11 @@
 #!/bin/sh
 
-COMPLETED_DIR="$HOME/Downloads/"
-ACTION="$(notify-send "Download Complete" "$(basename "$1")" -A "open=Open Downloads Folder")"
+ACTION="$(notify-send -i emblem-checked "Download Complete" "$(basename "$1")" -A "opendir=Open Downloads Folder" -A "open=Open File")"
 
-if [ "$ACTION" = "open" ]; then
-    xdg-open "$COMPLETED_DIR"
-fi
+case "$ACTION" in
+    opendir)
+        xdg-open "$(dirname "$1")"
+        ;;
+    open)
+        xdg-open "$1"
+esac

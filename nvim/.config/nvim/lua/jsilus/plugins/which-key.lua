@@ -8,14 +8,14 @@ return {
     config = function()
         local wk = require("which-key")
 
-        wk.register({ ["<leader>"] = {
-            b = { name = "buffers" },
-            e = { name = "explorer" },
-            f = { name = "find file" },
-            h = { name = "git" },
-            s = { name = "split window" },
-            x = { name = "error window" },
-        }})
+        wk.add({
+            { "<leader>b", group = "buffers" },
+            { "<leader>e", group = "explorer" },
+            { "<leader>f", group = "find file" },
+            { "<leader>g", group = "git" },
+            { "<leader>s", group = "split window" },
+            { "<leader>x", group = "error window" },
+        })
 
 
         wk.setup()

@@ -5,6 +5,7 @@ import icons from "lib/icons"
 
 const notifications = await Service.import("notifications")
 const notifs = notifications.bind("notifications")
+const notifs_available = notifs.as(n => n.filter(ni => ni.urgency != "low").length > 0)
 
 const Animated = (n: Notif) => Widget.Revealer({
     transition_duration: options.transition.value,
@@ -18,12 +19,12 @@ const Animated = (n: Notif) => Widget.Revealer({
 
 const ClearButton = () => Widget.Button({
     on_clicked: notifications.clear,
-    sensitive: notifs.as(n => n.length > 0),
+    sensitive: notifs_available,
     child: Widget.Box({
         children: [
             Widget.Label("Clear "),
             Widget.Icon({
-                icon: notifs.as(n => icons.trash[n.length > 0 ? "full" : "empty"]),
+                icon: notifs.as(n => icons.trash[n.filter(ni => ni.urgency != "low").length > 0 ? "full" : "empty"]),
             }),
         ],
     }),
@@ -41,12 +42,12 @@ const NotificationList = () => {
     const map: Map<number, ReturnType<typeof Animated>> = new Map
     const box = Widget.Box({
         vertical: true,
-        children: notifications.notifications.map(n => {
+        children: notifications.notifications.filter(n => n.urgency != "low").map(n => {
             const w = Animated(n)
             map.set(n.id, w)
             return w
         }),
-        visible: notifs.as(n => n.length > 0),
+        visible: notifs_available,
     })
 
     function remove(_: unknown, id: number) {
@@ -69,9 +70,11 @@ const NotificationList = () => {
 
                 const n = notifications.getNotification(id)!
 
-                const w = Animated(n)
-                map.set(id, w)
-                box.children = [w, ...box.children]
+                if (n.urgency != "low") {
+                    const w = Animated(n)
+                    map.set(id, w)
+                    box.children = [w, ...box.children]
+                }
             }
         }, "notified")
 }
@@ -83,7 +86,7 @@ const Placeholder = () => Widget.Box({
     hpack: "center",
     vexpand: true,
     hexpand: true,
-    visible: notifs.as(n => n.length === 0),
+    visible: notifs.as(n => n.filter(ni => ni.urgency != "low").length === 0),
     children: [
         Widget.Icon(icons.notifications.silent),
         Widget.Label("Your inbox is empty"),

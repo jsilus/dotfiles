@@ -233,6 +233,9 @@ map st sort_by_time
 cmd sort_by_size :set sortby size; set info size
 map ss sort_by_size
 
+cmd sort_by_extension :set sortby ext; set info size
+map se sort_by_extension
+
 cmd reverse_sort :set reverse!
 map sr reverse_sort
 
@@ -258,6 +261,14 @@ map td $trash rm
 map tc %trash clear
 map tv $trash view
 
+#########
+# taggy #
+#########
+map T
+map TA push %taggy<space>add<space>
+map TT push %taggy<space>tag<space>$f<space>
+map TV push %taggy<space>view<space>$f<enter>
+
 ########
 # misc #
 ########
@@ -266,6 +277,9 @@ map gs share
 
 # visual
 map zp toggle_preview
+map i $LESSOPEN='| ~/.config/lf/lf_kitty_preview %s' less -R $f
+
+map . set hidden!
 
 # open files
 map x $$f
