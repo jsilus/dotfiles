@@ -72,6 +72,9 @@ return {
                     },
                 })
             end,
+            ["clangd"] = function()
+                lspconfig.clangd.setup{}
+            end,
         })
 
     end
