@@ -11,13 +11,13 @@ return {
             options = {
                 theme = 'auto',
                 component_separators = '|',
-                section_separators = { left = '', right = '' },
+                -- section_separators = { left = '', right = '' },
                 disabled_filetypes = {},
             },
             sections = {
-                lualine_a = {
-                    { 'mode', separator = { left = '' }, right_padding = 2 },
-                },
+                -- lualine_a = {
+                --     { 'mode', separator = { left = '' }, right_padding = 2 },
+                -- },
                 lualine_b = { 'filename', 'branch' },
                 lualine_c = {},
                 lualine_x = {
@@ -27,9 +27,9 @@ return {
                     },
                 },
                 lualine_y = { 'filetype', 'progress' },
-                lualine_z = {
-                    { 'location', separator = { right = '' }, left_padding = 2 },
-                },
+                -- lualine_z = {
+                --     { 'location', separator = { right = '' }, left_padding = 2 },
+                -- },
             },
             inactive_sections = {
                 lualine_a = { 'filename' },
