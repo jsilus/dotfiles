@@ -1,1 +1,1 @@
-require("jsilus")
+require("config")

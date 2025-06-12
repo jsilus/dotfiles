@@ -22,3 +22,4 @@ opt.cursorline = true
 opt.showmode = false
 opt.scrolloff = 10
 opt.termguicolors = true
+opt.fillchars = { eob = " " }

@@ -10,18 +10,15 @@ return {
         local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 
         treesitter.setup({
-            ensure_installed = "lua",
-            ignore_install = {
-
+            ensure_installed = {
+                "lua", "c", "cpp", "rust", "python", "bash"
             },
-            modules = {
-
-            },
+            ignore_install = {},
+            modules = {},
             sync_install = false,
             auto_install = true,
             highlight = {
                 enable = true,
-                disable = { "latex" },
             },
 
         })

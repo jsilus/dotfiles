@@ -3,6 +3,7 @@ return {
     dependencies = {
         "nvim-tree/nvim-web-devicons"
     },
+    event = { "BufReadPre", "BufNewFile" },
     config = function()
         local lualine = require("lualine")
         local lazy_status = require("lazy.status")
