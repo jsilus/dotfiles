@@ -6,7 +6,7 @@ return {
     },
     {
         "numToStr/Comment.nvim",
-        event = { "InsertEnter" },
+        event = { "BufReadPre", "BufNewFile" },
         opts = {},
     }
 }

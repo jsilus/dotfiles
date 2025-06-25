@@ -24,6 +24,7 @@ return {
         input = {
             enabled = true,
         },
+        -- TODO: look into lazygit
         notifier = {
           enabled = true,
           timeout = 3000,

@@ -5,13 +5,13 @@ return {
     config = function()
         local todo_comments = require("todo-comments")
 
-        map("n", "]t", function()
-            todo_comments.jump_next()
-        end, "Next todo comment")
-
-        map("n", "[t", function()
-            todo_comments.jump_prev()
-        end, "Previous todo comment")
+        -- map("n", "]t", function()
+        --     todo_comments.jump_next()
+        -- end, "Next todo comment")
+        --
+        -- map("n", "[t", function()
+        --     todo_comments.jump_prev()
+        -- end, "Previous todo comment")
 
         todo_comments.setup({})
     end

@@ -11,7 +11,7 @@ return {
 
         treesitter.setup({
             ensure_installed = {
-                "lua", "c", "cpp", "rust", "python", "bash"
+                "lua", "c", "cpp", "rust", "python", "bash", "regex"
             },
             ignore_install = {},
             modules = {},
