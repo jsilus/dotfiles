@@ -1,45 +1,78 @@
-#!/bin/sh
-source "$ZDOTDIR/zsh-functions"
+local add_file () {
+    [ -f "${XDG_CONFIG_HOME:-${HOME}/.config}/zsh/$1" ] && . "${XDG_CONFIG_HOME:-${HOME}/.config}/zsh/$1"
+}
 
-zsh_add_file "zsh-exports"
+# bootstrap zinit
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+[ ! -d "$ZINIT_HOME" ] && mkdir -p "$(dirname $ZINIT_HOME)"
+[ ! -d "$ZINIT_HOME/.git" ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+source "${ZINIT_HOME}/zinit.zsh"
 
+# source files
+add_file zsh-exports
+add_file zsh-prompt
+add_file zsh-aliases
+add_file zsh-vim-mode
+add_file zsh-fzf
+
+# source os specific file
+case "$(uname -s)" in
+    Darwin*)    add_file zsh-mac ;;
+esac
+
+# plugins
+zinit light zsh-users/zsh-syntax-highlighting
+zinit light zsh-users/zsh-completions
+zinit light zsh-users/zsh-autosuggestions
+zinit light Aloxaf/fzf-tab
+zinit light zdharma-continuum/fast-syntax-highlighting
+zinit light hlissner/zsh-autopair
+
+# misc options
 unsetopt BEEP
-setopt autocd menucomplete
-stty stop undef
 zle_highlight=('paste:none')
 autoload -Uz add-zsh-hook
 
+# unbind freezing keybinds
+stty stop undef
+stty start undef
+
+# keybindings
+bindkey '^p' history-search-backward
+bindkey '^n' history-search-forward
+
 # history
-HISTSIZE=10000
-SAVEHIST=10000
-HISTFILE="$XDG_CACHE_HOME/zsh/history"
-mkdir -p "$XDG_CACHE_HOME/zsh"
+ZSH_CACHE_DIR="${XDG_CACHE_HOME:-${HOME}/.cache}/zsh"
+[ ! -d "$ZSH_CACHE_DIR" ] && mkdir -p "$ZSH_CACHE_DIR"
+HISTSIZE=5000
+HISTFILE="$ZSH_CACHE_DIR/history"
+SAVEHIST=$HISTSIZE
+HISTDUP=erase
+setopt appendhistory
+setopt sharehistory
+setopt hist_ignore_space
+setopt hist_ignore_all_dups
+setopt hist_save_no_dups
+setopt hist_ignore_dups
+setopt hist_find_no_dups
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+
 
 # completions
 autoload -U compinit
-zstyle ':completion:*' menu select
+zstyle ':completion:' menu select
 zmodload zsh/complist
 compinit
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' list-colors '${(s.:.)LS_COLORS}'
+zstyle ':completion:*' menu no
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 
-set_title () {
-    printf "\033]0;zsh $(pwd | sed "s|$HOME|~|")\007" > /dev/tty
-}
-add-zsh-hook precmd set_title
-set_title
-
-
-zsh_add_plugin "zsh-users/zsh-autosuggestions"
-ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-zsh_add_plugin "zdharma-continuum/fast-syntax-highlighting"
-zsh_add_plugin "hlissner/zsh-autopair"
-
-zsh_add_file "zsh-aliases"
-zsh_add_file "zsh-prompt"
-zsh_add_file "zsh-vim-mode"
-zsh_add_file "zsh-fzf"
-zsh_add_file "zsh-keybinds"
 
 [[ -o interactive ]] && ascii
+zinit cdreplay -q
 
+# command startup
+eval "$(fzf --zsh)"
 eval "$(zoxide init zsh --cmd cd)"
 autopair-init

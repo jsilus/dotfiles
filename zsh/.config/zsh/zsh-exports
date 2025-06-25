@@ -27,3 +27,6 @@ export XCURSOR_PATH=/usr/share/icons:$XDG_DATA_HOME/icons
 export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="$XDG_CONFIG_HOME"/java
 export PKG_CACHE_PATH="$XDG_CACHE_HOME"/pkg-cache
 export SQLITE_HISTORY="$XDG_CACHE_HOME"/sqlite_history
+
+export CPATH="/opt/homebrew/include:$CPATH"
+export LIBRARY_PATH="/opt/homebrew/lib:$LIBRARY_PATH"
