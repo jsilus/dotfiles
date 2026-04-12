@@ -1,1 +1,3 @@
-require("config")
+require('config')
+
+vim.cmd('colorscheme catppuccin')
